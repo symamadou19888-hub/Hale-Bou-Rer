@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signalements - Halé Bou Rér</title>
+</head>
+
+<body>
+
+<h1>Signalements récents</h1>
+
+{% for signalement in signalements %}
+
+<div style="border:1px solid #ccc; padding:15px; margin:15px; border-radius:10px;">
+
+{% if signalement[1] == "trouve" %}
+<h2>🟢 Enfant trouvé</h2>
+{% else %}
+<h2>🔴 Enfant perdu</h2>
+{% endif %}
+
+<p><strong>📍 Zone :</strong> {{ signalement[3] }}</p>
+<p><strong>📝 Description :</strong> {{ signalement[4] }}</p>
+<p><strong>📞 Contact :</strong> {{ signalement[5] }}</p>
+<p><strong>📅 Date :</strong> {{ signalement[6] }}</p>
+
+<form method="POST" action="/resolu/{{ signalement[0] }}">
+    <button type="submit">✅ Marquer comme résolu</button>
+</form>
+
+</div>
+
+{% endfor %}
+
+<br>
+
+<a href="/">⬅ Retour à l'accueil</a>
+
+</body>
+</html>

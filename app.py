@@ -46,5 +46,22 @@ def perdu():
     return render_template("perdu.html")
 
 
+@app.route("/signalements")
+def signalements():
+    conn = sqlite3.connect("database.db")
+    signalements = conn.execute("SELECT * FROM signalements ORDER BY id DESC").fetchall()
+    conn.close()
+    return render_template("signalements.html", signalements=signalements)
+
+
+@app.route("/resolu/<int:id>", methods=["POST"])
+def resolu(id):
+    conn = sqlite3.connect("database.db")
+    conn.execute("DELETE FROM signalements WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+    return redirect("/signalements")
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
