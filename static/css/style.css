@@ -66,3 +66,146 @@ button:hover {
 a {
     text-decoration: none;
 }
+
+.mission {
+    background: white;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 500px;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+.mission h3 {
+    color: #2E7D32;
+    margin-bottom: 10px;
+}
+
+.mission p {
+    color: #555;
+    line-height: 1.5;
+}
+
+.header {
+    text-align: center;
+    background: white;
+    padding: 25px 15px;
+    margin-bottom: 20px;
+    border-radius: 0 0 25px 25px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+.header img {
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    margin: 5px;
+    color: #2E7D32;
+}
+
+.header h2 {
+    margin: 5px;
+    color: #555;
+    font-size: 18px;
+}
+
+.accueil button {
+    width: 95%;
+    max-width: 400px;
+    padding: 16px;
+    border-radius: 15px;
+    font-size: 18px;
+    border: none;
+    margin: 8px auto;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.accueil .btn-trouve {
+    background: #2E7D32;
+    color: white;
+}
+
+.accueil .btn-perdu {
+    background: #F57C00;
+    color: white;
+}
+
+.accueil button:not(.btn-trouve):not(.btn-perdu) {
+    background: #1976D2;
+    color: white;
+}
+
+body h1 {
+    margin-top: 20px;
+}
+
+form label {
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    color: #444;
+    margin-top: 10px;
+}
+
+form button {
+    background: #2E7D32;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 12px;
+    font-size: 17px;
+}
+
+form input[type="file"] {
+    background: #f5f5f5;
+    padding: 10px;
+}
+
+form textarea {
+    resize: none;
+}
+
+body > a {
+    display: inline-block;
+    margin-top: 20px;
+    color: #2E7D32;
+    font-weight: bold;
+}
+
+.carte-signalement {
+    background: white;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 18px;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.carte-signalement h2 {
+    text-align: center;
+}
+
+.carte-signalement .trouve {
+    color: #2E7D32;
+}
+
+.carte-signalement .perdu {
+    color: #F57C00;
+}
+
+.btn-resolu {
+    width: 100%;
+    background: #555;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 16px;
+}
+
+.btn-resolu:hover {
+    opacity: 0.9;
+}
