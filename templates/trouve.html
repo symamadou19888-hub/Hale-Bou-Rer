@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enfant trouvé - Halé Bou Rér</title>
+</head>
+
+<body>
+
+<h1>J'ai trouvé un enfant</h1>
+
+<form method="POST" action="/trouve">
+
+    <label>Photo de l'enfant</label><br>
+    <input type="file" accept="image/*"><br><br>
+
+    <label>Zone où l'enfant a été trouvé</label><br>
+    <input type="text" name="zone" placeholder="Exemple : Médina, Dakar"><br><br>
+
+    <label>Description de l'enfant</label><br>
+    <textarea name="description" placeholder="Âge approximatif, vêtements, détails..."></textarea><br><br>
+
+    <label>Numéro de téléphone</label><br>
+    <input type="tel" name="telephone" placeholder="Votre numéro"><br><br>
+
+    <button type="submit">
+        Publier le signalement
+    </button>
+
+</form>
+
+<br>
+
+<a href="/">⬅ Retour à l'accueil</a>
+
+</body>
+</html>
