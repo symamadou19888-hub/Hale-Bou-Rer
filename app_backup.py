@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, send_from_directory
+from flask import Flask, render_template, request, redirect
 from werkzeug.utils import secure_filename
 
 import sqlite3
@@ -13,32 +13,20 @@ def enregistrer_signalement(type_signalement):
     description = request.form.get("description")
     telephone = request.form.get("telephone")
 
-    photo = request.files.get("photo")
-    nom_photo = None
-
-    if photo and photo.filename:
-        nom_photo = secure_filename(photo.filename)
-        photo.save("uploads/" + nom_photo)
-
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
 
     cursor.execute(
         """
         INSERT INTO signalements
-        (type, photo, zone, description, telephone)
-        VALUES (?, ?, ?, ?, ?)
+        (type, zone, description, telephone)
+        VALUES (?, ?, ?, ?)
         """,
-        (type_signalement, nom_photo, zone, description, telephone)
+        (type_signalement, zone, description, telephone)
     )
 
     conn.commit()
     conn.close()
-
-
-@app.route("/uploads/<filename>")
-def uploaded_file(filename):
-    return send_from_directory("uploads", filename)
 
 
 @app.route("/")
