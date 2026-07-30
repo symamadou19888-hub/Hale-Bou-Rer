@@ -7,30 +7,45 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
 
-<h1>Halé Bou Rér</h1>
+<div class="accueil">
 
-<h2>Enfant perdu</h2>
+<img src="{{ url_for('static', filename='images/logo.png') }}" width="150"><h1>👶 Halé Bou Rér</h1>
+
+<h2>Retrouvons nos enfants ensemble</h2>
+
+<p>
+Chaque minute compte.<br>
+Un simple signalement peut permettre à un enfant de retrouver sa famille.
+</p>
+
+<br>
 
 <a href="/trouve">
     <button class="btn-trouve">
-        J'ai trouvé un enfant
-    </button>
-</a>
-
-<a href="/perdu">
-    <button class="btn-perdu">
-        Je cherche un enfant
+        🟢 J'ai trouvé un enfant
     </button>
 </a>
 
 <br><br>
-<a href="/signalements">
-    <button>
-        Voir les signalements récents
+
+<a href="/perdu">
+    <button class="btn-perdu">
+        🟠 Je cherche un enfant
     </button>
 </a>
+
+<br><br>
+
+<a href="/signalements">
+    <button>
+        📋 Voir les signalements
+    </button>
+</a>
+
+</div>
 
 </body>
 </html>
