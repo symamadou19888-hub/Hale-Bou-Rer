@@ -13,11 +13,6 @@ UPLOAD_FOLDER = "uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 def enregistrer_signalement(type_signalement):
-    prenom = request.form.get("prenom")
-    age = request.form.get("age")
-    sexe = request.form.get("sexe")
-    ville = request.form.get("ville")
-
     zone = request.form.get("zone")
     description = request.form.get("description")
     telephone = request.form.get("telephone")
@@ -37,23 +32,10 @@ def enregistrer_signalement(type_signalement):
     cursor.execute(
         """
         INSERT INTO signalements
-        (type, photo, zone, description, telephone, latitude, longitude, statut, prenom, age, sexe, ville)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (type, photo, zone, description, telephone, latitude, longitude, statut)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """,
-        (
-            type_signalement,
-            nom_photo,
-            zone,
-            description,
-            telephone,
-            latitude,
-            longitude,
-            "en_attente",
-            prenom,
-            age,
-            sexe,
-            ville
-        )
+        (type_signalement, nom_photo, zone, description, telephone, latitude, longitude, "en_attente")
     )
 
     conn.commit()
