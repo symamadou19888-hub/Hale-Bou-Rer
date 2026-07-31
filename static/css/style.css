@@ -133,7 +133,7 @@ a {
 }
 
 .accueil button:not(.btn-trouve):not(.btn-perdu) {
-    background: #1976D2;
+    background: #c62828;
     color: white;
 }
 
