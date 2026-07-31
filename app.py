@@ -49,7 +49,12 @@ def uploaded_file(filename):
 
 @app.route("/")
 def accueil():
-    return render_template("index.html")
+    conn = sqlite3.connect("database.db")
+    nb_aujourdhui = conn.execute(
+        "SELECT COUNT(*) FROM signalements WHERE statut='actif' AND date(date_creation) = date('now')"
+    ).fetchone()[0]
+    conn.close()
+    return render_template("index.html", nb_aujourdhui=nb_aujourdhui)
 
 
 @app.route("/trouve", methods=["GET", "POST"])
