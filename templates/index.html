@@ -51,9 +51,11 @@
 </div>
 
 {% if nb_aujourdhui and nb_aujourdhui > 0 %}
-<div style="background:#1976D2; color:white; padding:12px; border-radius:12px; max-width:400px; margin:15px auto; font-weight:bold;">
+<a href="/signalements" style="text-decoration:none;">
+<div style="background:#1976D2; color:white; padding:12px; border-radius:12px; max-width:400px; margin:15px auto; font-weight:bold; cursor:pointer;">
     🔔 {{ nb_aujourdhui }} nouveau{{ 's' if nb_aujourdhui > 1 else '' }} signalement{{ 's' if nb_aujourdhui > 1 else '' }} aujourd'hui
 </div>
+</a>
 {% endif %}
 
 
