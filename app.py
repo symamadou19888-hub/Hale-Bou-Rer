@@ -95,6 +95,10 @@ def perdu():
 def signalements():
     filtre = request.args.get("filtre")
     recherche = request.args.get("recherche", "").strip()
+    prenom = request.args.get("prenom", "").strip()
+    ville = request.args.get("ville", "").strip()
+    age = request.args.get("age", "").strip()
+    sexe = request.args.get("sexe", "").strip()
 
     conn = sqlite3.connect("database.db")
 
@@ -106,14 +110,43 @@ def signalements():
         parametres.append(filtre)
 
     if recherche:
-        requete += " AND zone LIKE ?"
-        parametres.append(f"%{recherche}%")
+        requete += " AND (zone LIKE ? OR prenom LIKE ? OR ville LIKE ? OR age LIKE ? OR sexe LIKE ? OR description LIKE ?)"
+        parametres.extend([
+            f"%{recherche}%",
+            f"%{recherche}%",
+            f"%{recherche}%",
+            f"%{recherche}%",
+            f"%{recherche}%",
+            f"%{recherche}%"
+        ])
+
+    if prenom:
+        requete += " AND prenom LIKE ?"
+        parametres.append(f"%{prenom}%")
+
+    if ville:
+        requete += " AND ville LIKE ?"
+        parametres.append(f"%{ville}%")
+
+    if age:
+        requete += " AND age LIKE ?"
+        parametres.append(f"%{age}%")
+
+    if sexe:
+        requete += " AND sexe=?"
+        parametres.append(sexe)
 
     requete += " ORDER BY id DESC"
 
     signalements = conn.execute(requete, parametres).fetchall()
     conn.close()
-    return render_template("signalements.html", signalements=signalements, recherche=recherche, filtre=filtre)
+
+    return render_template(
+        "signalements.html",
+        signalements=signalements,
+        recherche=recherche,
+        filtre=filtre
+    )
 
 
 @app.route("/resolu/<int:id>", methods=["POST"])
@@ -168,6 +201,22 @@ def admin_rejeter(id):
     conn.commit()
     conn.close()
     return redirect("/admin")
+
+
+
+
+@app.route("/detail/<int:id>")
+def detail(id):
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM signalements WHERE id=?", (id,))
+    signalement = cursor.fetchone()
+    conn.close()
+
+    if signalement is None:
+        return "Signalement introuvable", 404
+
+    return render_template("detail.html", signalement=signalement)
 
 
 if __name__ == "__main__":

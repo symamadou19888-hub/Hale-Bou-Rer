@@ -9,6 +9,33 @@
 
 <body>
 
+<button onclick="window.location.href='/'" class="btn-retour">
+←
+</button>
+
+<style>
+.btn-retour {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #2E7D32;
+    border-radius: 50%;
+    background: white;
+    color: #2E7D32;
+    font-size: 25px;
+    font-weight: bold;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.35);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+</style>
+
+
 <h1>🟠 Je cherche un enfant</h1>
 
 <form method="POST" action="/perdu" enctype="multipart/form-data">

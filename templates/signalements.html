@@ -12,6 +12,33 @@
 
 <body>
 
+<button onclick="window.location.href='/'" class="btn-retour">
+←
+</button>
+
+<style>
+.btn-retour {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #2E7D32;
+    border-radius: 50%;
+    background: white;
+    color: #2E7D32;
+    font-size: 25px;
+    font-weight: bold;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.35);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+</style>
+
+
 <h1>📋 Signalements récents</h1>
 
 <div id="carte" style="height: 400px; margin-bottom: 20px; border-radius: 10px;"></div>
@@ -23,8 +50,13 @@
 </div>
 
 <form method="GET" action="/signalements" style="text-align:center; margin-bottom:20px;">
-    {% if filtre %}<input type="hidden" name="filtre" value="{{ filtre }}">{% endif %}
-    <input type="text" name="recherche" placeholder="🔍 Rechercher par quartier..." value="{{ recherche or '' }}" style="width:80%; max-width:400px; padding:12px; border-radius:20px; border:1px solid #ccc;">
+
+<input type="text"
+name="recherche"
+placeholder="🔍 Écrire le nom"
+value="{{ recherche or '' }}"
+style="width:90%; max-width:500px; padding:14px; border-radius:25px; border:1px solid #ccc;">
+
 </form>
 
 <script>
@@ -69,22 +101,45 @@ points.forEach(function(p) {
 {% endif %}
 
 
-{% if signalement[2] %}<img src="/uploads/{{ signalement[2] }}" width="200" style="border-radius:15px;"><br><br>{% endif %}
+{% if signalement[2] %}
+<div style="text-align:center; margin-bottom:15px;">
+    <img src="/uploads/{{ signalement[2] }}"
+         style="width:100%; max-width:380px; border-radius:20px; box-shadow:0 4px 12px rgba(0,0,0,0.25);">
+</div>
+{% endif %}
+
+<p><b>👤 Prénom :</b> {{ signalement[10] }}</p>
+
+<p><b>🎂 Âge :</b> {{ signalement[11] }}</p>
+
+<p><b>⚧ Sexe :</b> {{ signalement[12] }}</p>
+
+<p><b>🏙️ Ville :</b> {{ signalement[13] }}</p>
 
 <p><b>📍 Zone :</b> {{ signalement[3] }}</p>
 
 <p><b>📝 Description :</b><br>
 {{ signalement[4] }}</p>
 
-<p><b>📞 Contact :</b> {{ signalement[5] }}</p>
+<p><b>📞 Contact :</b> <span style="color:#2E7D32;font-weight:bold;">Disponible auprès de l\'administration après validation.</span></p>
 
 <p><b>📅 Date :</b> {{ signalement[6] }}</p>
 
-<form method="POST" action="/resolu/{{ signalement[0] }}">
+<div style="margin-top:15px;">
+
+<a href="/detail/{{ signalement[0] }}">
+<button type="button" style="background:#1976D2;color:white;border:none;padding:10px 15px;border-radius:10px;margin-right:10px;cursor:pointer;">
+👁 Voir les détails
+</button>
+</a>
+
+<form method="POST" action="/resolu/{{ signalement[0] }}" style="display:inline;">
 <button class="btn-resolu">
 ✅ Marquer comme résolu
 </button>
 </form>
+
+</div>
 
 </div>
 
