@@ -6,11 +6,46 @@
     <title>Signalements - Halé Bou Rér</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 
 <body>
 
 <h1>📋 Signalements récents</h1>
+
+<div id="carte" style="height: 400px; margin-bottom: 20px; border-radius: 10px;"></div>
+
+<script>
+var carte = L.map('carte').setView([14.6928, -17.4467], 7);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap'
+}).addTo(carte);
+
+var points = [
+    {% for signalement in signalements %}
+    {% if signalement[8] and signalement[9] %}
+    {
+        lat: {{ signalement[8] }},
+        lng: {{ signalement[9] }},
+        type: "{{ signalement[1] }}",
+        zone: "{{ signalement[3] }}"
+    },
+    {% endif %}
+    {% endfor %}
+];
+
+points.forEach(function(p) {
+    var couleur = p.type === "trouve" ? "green" : "orange";
+    L.circleMarker([p.lat, p.lng], {
+        color: couleur,
+        fillColor: couleur,
+        fillOpacity: 0.8,
+        radius: 8
+    }).addTo(carte).bindPopup(p.zone);
+});
+</script>
 
 {% for signalement in signalements %}
 

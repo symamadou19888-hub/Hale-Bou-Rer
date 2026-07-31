@@ -24,9 +24,33 @@
     <label>Numéro de téléphone</label><br>
     <input type="tel" name="telephone" placeholder="Votre numéro"><br><br>
 
+    <input type="hidden" name="latitude" id="latitude">
+    <input type="hidden" name="longitude" id="longitude">
+
+    <button type="button" onclick="obtenirPosition()">📍 Utiliser ma position actuelle</button>
+    <p id="statut_position"></p>
+    <br>
+
     <button type="submit">
         Publier le signalement
     </button>
+
+    <script>
+    function obtenirPosition() {
+        if (navigator.geolocation) {
+            document.getElementById("statut_position").innerText = "Localisation en cours...";
+            navigator.geolocation.getCurrentPosition(function(position) {
+                document.getElementById("latitude").value = position.coords.latitude;
+                document.getElementById("longitude").value = position.coords.longitude;
+                document.getElementById("statut_position").innerText = "✅ Position enregistrée";
+            }, function() {
+                document.getElementById("statut_position").innerText = "❌ Impossible d'obtenir la position";
+            });
+        } else {
+            document.getElementById("statut_position").innerText = "❌ Géolocalisation non supportée";
+        }
+    }
+    </script>
 
 </form>
 

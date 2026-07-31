@@ -12,6 +12,8 @@ def enregistrer_signalement(type_signalement):
     zone = request.form.get("zone")
     description = request.form.get("description")
     telephone = request.form.get("telephone")
+    latitude = request.form.get("latitude") or None
+    longitude = request.form.get("longitude") or None
 
     photo = request.files.get("photo")
     nom_photo = None
@@ -26,10 +28,10 @@ def enregistrer_signalement(type_signalement):
     cursor.execute(
         """
         INSERT INTO signalements
-        (type, photo, zone, description, telephone)
-        VALUES (?, ?, ?, ?, ?)
+        (type, photo, zone, description, telephone, latitude, longitude)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         """,
-        (type_signalement, nom_photo, zone, description, telephone)
+        (type_signalement, nom_photo, zone, description, telephone, latitude, longitude)
     )
 
     conn.commit()
