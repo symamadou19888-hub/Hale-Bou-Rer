@@ -4,55 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enfant trouvé - Halé Bou Rér</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
 
-<h1>J'ai trouvé un enfant</h1>
+<h1>🟢 J'ai trouvé un enfant</h1>
 
 <form method="POST" action="/trouve" enctype="multipart/form-data">
 
     <label>Photo de l'enfant</label><br>
     <input type="file" name="photo" accept="image/*"><br><br>
 
-    <label>Zone où l'enfant a été trouvé</label><br>
-    <input type="text" name="zone" placeholder="Exemple : Médina, Dakar"><br><br>
+    <label>Prénom</label><br>
+    <input type="text" name="prenom" placeholder="Prénom de l'enfant"><br><br>
 
-    <label>Description de l'enfant</label><br>
-    <textarea name="description" placeholder="Âge approximatif, vêtements, détails..."></textarea><br><br>
+    <label>Âge</label><br>
+    <input type="text" name="age" placeholder="Exemple : 8 ans"><br><br>
+
+    <label>Sexe</label><br>
+    <select name="sexe">
+        <option value="">Sélectionner</option>
+        <option value="Garçon">Garçon</option>
+        <option value="Fille">Fille</option>
+    </select><br><br>
+
+    <label>Ville</label><br>
+    <input type="text" name="ville" placeholder="Exemple : Dakar"><br><br>
+
+    <label>Zone où l'enfant a été trouvé</label><br>
+    <input type="text" name="zone" placeholder="Exemple : Médina"><br><br>
+
+    <label>Description</label><br>
+    <textarea name="description" placeholder="Vêtements, âge approximatif, signes particuliers..."></textarea><br><br>
 
     <label>Numéro de téléphone</label><br>
-    <input type="tel" name="telephone" placeholder="Votre numéro"><br><br>
+    <input type="tel" name="telephone"><br><br>
 
     <input type="hidden" name="latitude" id="latitude">
     <input type="hidden" name="longitude" id="longitude">
 
     <p id="statut_position">📍 Localisation en cours...</p>
+
     <br>
 
     <button type="submit">
         Publier le signalement
     </button>
 
-    <script>
-    window.onload = obtenirPosition;
-    function obtenirPosition() {
-        if (navigator.geolocation) {
-            document.getElementById("statut_position").innerText = "Localisation en cours...";
-            navigator.geolocation.getCurrentPosition(function(position) {
-                document.getElementById("latitude").value = position.coords.latitude;
-                document.getElementById("longitude").value = position.coords.longitude;
-                document.getElementById("statut_position").innerText = "✅ Position enregistrée";
-            }, function() {
-                document.getElementById("statut_position").innerText = "❌ Impossible d'obtenir la position";
-            });
-        } else {
-            document.getElementById("statut_position").innerText = "❌ Géolocalisation non supportée";
-        }
-    }
-    </script>
-
 </form>
+
+<script>
+window.onload = obtenirPosition;
+
+function obtenirPosition() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById("latitude").value = position.coords.latitude;
+            document.getElementById("longitude").value = position.coords.longitude;
+            document.getElementById("statut_position").innerHTML = "✅ Position enregistrée";
+        }, function() {
+            document.getElementById("statut_position").innerHTML = "❌ Position indisponible";
+        });
+    }
+}
+</script>
 
 <br>
 

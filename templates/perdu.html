@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enfant perdu - Halé Bou Rér</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
 <body>
@@ -15,15 +16,15 @@
     <label>Photo de l'enfant</label><br>
     <input type="file" name="photo" accept="image/*"><br><br>
 
-    <label>Prénom de l'enfant (facultatif)</label><br>
-    <input type="text" name="prenom" placeholder="Prénom"><br><br>
+    <label>Prénom</label><br>
+    <input type="text" name="prenom" placeholder="Prénom de l'enfant"><br><br>
 
-    <label>Âge approximatif</label><br>
-    <input type="text" name="age" placeholder="Exemple : 5 ans"><br><br>
+    <label>Âge</label><br>
+    <input type="text" name="age" placeholder="Exemple : 8 ans"><br><br>
 
     <label>Sexe</label><br>
     <select name="sexe">
-        <option value="">Non précisé</option>
+        <option value="">Sélectionner</option>
         <option value="Garçon">Garçon</option>
         <option value="Fille">Fille</option>
     </select><br><br>
@@ -32,40 +33,42 @@
     <input type="text" name="ville" placeholder="Exemple : Dakar"><br><br>
 
     <label>Dernière zone connue</label><br>
-    <input type="text" name="zone" placeholder="Exemple : Parcelles Assainies, Dakar"><br><br>
+    <input type="text" name="zone" placeholder="Exemple : Parcelles Assainies"><br><br>
 
-    <label>Description de l'enfant</label><br>
+    <label>Description</label><br>
     <textarea name="description" placeholder="Vêtements, signes particuliers..."></textarea><br><br>
 
     <label>Numéro de téléphone</label><br>
-    <input type="tel" name="telephone" placeholder="Votre numéro"><br><br>
+    <input type="tel" name="telephone"><br><br>
 
     <input type="hidden" name="latitude" id="latitude">
     <input type="hidden" name="longitude" id="longitude">
 
     <p id="statut_position">📍 Localisation en cours...</p>
 
+    <br>
+
     <button type="submit">
         Publier la recherche
     </button>
 
-    <script>
-    window.onload = obtenirPosition;
-
-    function obtenirPosition() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                document.getElementById("latitude").value = position.coords.latitude;
-                document.getElementById("longitude").value = position.coords.longitude;
-                document.getElementById("statut_position").innerText = "✅ Position enregistrée";
-            }, function() {
-                document.getElementById("statut_position").innerText = "❌ Impossible d'obtenir la position";
-            });
-        }
-    }
-    </script>
-
 </form>
+
+<script>
+window.onload = obtenirPosition;
+
+function obtenirPosition() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            document.getElementById("latitude").value = position.coords.latitude;
+            document.getElementById("longitude").value = position.coords.longitude;
+            document.getElementById("statut_position").innerHTML = "✅ Position enregistrée";
+        }, function() {
+            document.getElementById("statut_position").innerHTML = "❌ Position indisponible";
+        });
+    }
+}
+</script>
 
 <br>
 
