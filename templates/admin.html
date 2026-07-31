@@ -53,6 +53,10 @@
 
 {% if signalement[2] %}<img src="/uploads/{{ signalement[2] }}" width="200" style="border-radius:15px;"><br><br>{% endif %}
 
+{% if signalement[10] %}<p><b>👤 Prénom :</b> {{ signalement[10] }}</p>{% endif %}
+{% if signalement[11] %}<p><b>🎂 Âge :</b> {{ signalement[11] }}</p>{% endif %}
+{% if signalement[12] %}<p><b>⚧ Sexe :</b> {{ signalement[12] }}</p>{% endif %}
+{% if signalement[13] %}<p><b>🏙️ Ville :</b> {{ signalement[13] }}</p>{% endif %}
 <p><b>📍 Zone :</b> {{ signalement[3] }}</p>
 <p><b>📝 Description :</b><br>{{ signalement[4] }}</p>
 <p><b>📞 Contact :</b> {{ signalement[5] }}</p>

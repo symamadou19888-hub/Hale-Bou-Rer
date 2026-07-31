@@ -116,6 +116,10 @@ points.forEach(function(p) {
 
 <p><b>🏙️ Ville :</b> {{ signalement[13] }}</p>
 
+{% if signalement[10] %}<p><b>👤 Prénom :</b> {{ signalement[10] }}</p>{% endif %}
+{% if signalement[11] %}<p><b>🎂 Âge :</b> {{ signalement[11] }}</p>{% endif %}
+{% if signalement[12] %}<p><b>⚧ Sexe :</b> {{ signalement[12] }}</p>{% endif %}
+{% if signalement[13] %}<p><b>🏙️ Ville :</b> {{ signalement[13] }}</p>{% endif %}
 <p><b>📍 Zone :</b> {{ signalement[3] }}</p>
 
 <p><b>📝 Description :</b><br>
