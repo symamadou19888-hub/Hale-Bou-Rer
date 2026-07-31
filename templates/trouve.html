@@ -27,8 +27,7 @@
     <input type="hidden" name="latitude" id="latitude">
     <input type="hidden" name="longitude" id="longitude">
 
-    <button type="button" onclick="obtenirPosition()">📍 Utiliser ma position actuelle</button>
-    <p id="statut_position"></p>
+    <p id="statut_position">📍 Localisation en cours...</p>
     <br>
 
     <button type="submit">
@@ -36,6 +35,7 @@
     </button>
 
     <script>
+    window.onload = obtenirPosition;
     function obtenirPosition() {
         if (navigator.geolocation) {
             document.getElementById("statut_position").innerText = "Localisation en cours...";

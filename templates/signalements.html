@@ -16,6 +16,12 @@
 
 <div id="carte" style="height: 400px; margin-bottom: 20px; border-radius: 10px;"></div>
 
+<div class="filtre-boutons" style="text-align:center; margin-bottom:20px;">
+    <a href="/signalements"><button>Tous</button></a>
+    <a href="/signalements?filtre=trouve"><button>🟢 Trouvés</button></a>
+    <a href="/signalements?filtre=perdu"><button>🟠 Perdus</button></a>
+</div>
+
 <script>
 var carte = L.map('carte').setView([14.6928, -17.4467], 7);
 

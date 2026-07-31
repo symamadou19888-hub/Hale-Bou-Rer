@@ -66,8 +66,20 @@ def perdu():
 
 @app.route("/signalements")
 def signalements():
+    filtre = request.args.get("filtre")
+
     conn = sqlite3.connect("database.db")
-    signalements = conn.execute("SELECT * FROM signalements ORDER BY id DESC").fetchall()
+
+    if filtre in ("trouve", "perdu"):
+        signalements = conn.execute(
+            "SELECT * FROM signalements WHERE type=? ORDER BY id DESC",
+            (filtre,)
+        ).fetchall()
+    else:
+        signalements = conn.execute(
+            "SELECT * FROM signalements ORDER BY id DESC"
+        ).fetchall()
+
     conn.close()
     return render_template("signalements.html", signalements=signalements)
 
