@@ -8,18 +8,34 @@
 
 <body>
 
-<h1>Je cherche un enfant</h1>
+<h1>🟠 Je cherche un enfant</h1>
 
 <form method="POST" action="/perdu" enctype="multipart/form-data">
 
     <label>Photo de l'enfant</label><br>
     <input type="file" name="photo" accept="image/*"><br><br>
 
+    <label>Prénom de l'enfant (facultatif)</label><br>
+    <input type="text" name="prenom" placeholder="Prénom"><br><br>
+
+    <label>Âge approximatif</label><br>
+    <input type="text" name="age" placeholder="Exemple : 5 ans"><br><br>
+
+    <label>Sexe</label><br>
+    <select name="sexe">
+        <option value="">Non précisé</option>
+        <option value="Garçon">Garçon</option>
+        <option value="Fille">Fille</option>
+    </select><br><br>
+
+    <label>Ville</label><br>
+    <input type="text" name="ville" placeholder="Exemple : Dakar"><br><br>
+
     <label>Dernière zone connue</label><br>
     <input type="text" name="zone" placeholder="Exemple : Parcelles Assainies, Dakar"><br><br>
 
     <label>Description de l'enfant</label><br>
-    <textarea name="description" placeholder="Âge, vêtements, signes particuliers..."></textarea><br><br>
+    <textarea name="description" placeholder="Vêtements, signes particuliers..."></textarea><br><br>
 
     <label>Numéro de téléphone</label><br>
     <input type="tel" name="telephone" placeholder="Votre numéro"><br><br>
@@ -28,7 +44,6 @@
     <input type="hidden" name="longitude" id="longitude">
 
     <p id="statut_position">📍 Localisation en cours...</p>
-    <br>
 
     <button type="submit">
         Publier la recherche
@@ -36,9 +51,9 @@
 
     <script>
     window.onload = obtenirPosition;
+
     function obtenirPosition() {
         if (navigator.geolocation) {
-            document.getElementById("statut_position").innerText = "Localisation en cours...";
             navigator.geolocation.getCurrentPosition(function(position) {
                 document.getElementById("latitude").value = position.coords.latitude;
                 document.getElementById("longitude").value = position.coords.longitude;
@@ -46,8 +61,6 @@
             }, function() {
                 document.getElementById("statut_position").innerText = "❌ Impossible d'obtenir la position";
             });
-        } else {
-            document.getElementById("statut_position").innerText = "❌ Géolocalisation non supportée";
         }
     }
     </script>
