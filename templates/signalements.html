@@ -22,6 +22,11 @@
     <a href="/signalements?filtre=perdu"><button>🟠 Perdus</button></a>
 </div>
 
+<form method="GET" action="/signalements" style="text-align:center; margin-bottom:20px;">
+    {% if filtre %}<input type="hidden" name="filtre" value="{{ filtre }}">{% endif %}
+    <input type="text" name="recherche" placeholder="🔍 Rechercher par quartier..." value="{{ recherche or '' }}" style="width:80%; max-width:400px; padding:12px; border-radius:20px; border:1px solid #ccc;">
+</form>
+
 <script>
 var carte = L.map('carte').setView([14.6928, -17.4467], 7);
 
