@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modération - Halé Bou Rér</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<h1>🛡️ Modération des signalements</h1>
+
+{% if signalements|length == 0 %}
+<p>Aucun signalement en attente 🎉</p>
+{% endif %}
+
+{% for signalement in signalements %}
+
+<div class="carte-signalement">
+
+{% if signalement[1] == "trouve" %}
+<h2 class="trouve">🟢 Enfant trouvé</h2>
+{% else %}
+<h2 class="perdu">🟠 Enfant perdu</h2>
+{% endif %}
+
+{% if signalement[2] %}<img src="/uploads/{{ signalement[2] }}" width="200" style="border-radius:15px;"><br><br>{% endif %}
+
+<p><b>📍 Zone :</b> {{ signalement[3] }}</p>
+<p><b>📝 Description :</b><br>{{ signalement[4] }}</p>
+<p><b>📞 Contact :</b> {{ signalement[5] }}</p>
+<p><b>📅 Date :</b> {{ signalement[6] }}</p>
+
+<form method="POST" action="/admin/valider/{{ signalement[0] }}" style="display:inline;">
+    <input type="hidden" name="mot_de_passe" value="{{ mot_de_passe }}">
+    <button type="submit" style="background:#2E7D32; color:white;">✅ Valider</button>
+</form>
+
+<form method="POST" action="/admin/rejeter/{{ signalement[0] }}" style="display:inline;">
+    <input type="hidden" name="mot_de_passe" value="{{ mot_de_passe }}">
+    <button type="submit" style="background:#c62828; color:white;">❌ Rejeter</button>
+</form>
+
+</div>
+
+{% endfor %}
+
+<br>
+<a href="/">⬅ Retour à l'accueil</a>
+
+</body>
+</html>

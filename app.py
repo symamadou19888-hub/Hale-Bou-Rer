@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request, redirect, send_from_directory
 from werkzeug.utils import secure_filename
+from dotenv import load_dotenv
 
 import sqlite3
+import os
+
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -28,10 +32,10 @@ def enregistrer_signalement(type_signalement):
     cursor.execute(
         """
         INSERT INTO signalements
-        (type, photo, zone, description, telephone, latitude, longitude)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        (type, photo, zone, description, telephone, latitude, longitude, statut)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """,
-        (type_signalement, nom_photo, zone, description, telephone, latitude, longitude)
+        (type_signalement, nom_photo, zone, description, telephone, latitude, longitude, "en_attente")
     )
 
     conn.commit()
@@ -71,7 +75,7 @@ def signalements():
 
     conn = sqlite3.connect("database.db")
 
-    requete = "SELECT * FROM signalements WHERE 1=1"
+    requete = "SELECT * FROM signalements WHERE statut='actif'"
     parametres = []
 
     if filtre in ("trouve", "perdu"):
@@ -96,6 +100,51 @@ def resolu(id):
     conn.commit()
     conn.close()
     return redirect("/signalements")
+
+
+MOT_DE_PASSE_ADMIN = os.getenv("MOT_DE_PASSE_ADMIN")
+
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
+    if request.method == "POST":
+        mot_de_passe = request.form.get("mot_de_passe")
+        if mot_de_passe != MOT_DE_PASSE_ADMIN:
+            return render_template("admin_login.html", erreur="Mot de passe incorrect")
+
+        conn = sqlite3.connect("database.db")
+        en_attente = conn.execute(
+            "SELECT * FROM signalements WHERE statut='en_attente' ORDER BY id DESC"
+        ).fetchall()
+        conn.close()
+        return render_template("admin.html", signalements=en_attente, mot_de_passe=mot_de_passe)
+
+    return render_template("admin_login.html", erreur=None)
+
+
+@app.route("/admin/valider/<int:id>", methods=["POST"])
+def admin_valider(id):
+    mot_de_passe = request.form.get("mot_de_passe")
+    if mot_de_passe != MOT_DE_PASSE_ADMIN:
+        return redirect("/admin")
+
+    conn = sqlite3.connect("database.db")
+    conn.execute("UPDATE signalements SET statut='actif' WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+    return redirect("/admin")
+
+
+@app.route("/admin/rejeter/<int:id>", methods=["POST"])
+def admin_rejeter(id):
+    mot_de_passe = request.form.get("mot_de_passe")
+    if mot_de_passe != MOT_DE_PASSE_ADMIN:
+        return redirect("/admin")
+
+    conn = sqlite3.connect("database.db")
+    conn.execute("DELETE FROM signalements WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+    return redirect("/admin")
 
 
 if __name__ == "__main__":
