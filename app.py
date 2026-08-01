@@ -62,7 +62,7 @@ def enregistrer_signalement(type_signalement):
             telephone,
             latitude,
             longitude,
-            "en_attente",
+            "actif" if MODE_TEST else "en_attente",
             prenom,
             age,
             sexe,
@@ -177,6 +177,8 @@ def resolu(id):
 
 
 MOT_DE_PASSE_ADMIN = os.getenv("MOT_DE_PASSE_ADMIN")
+
+MODE_TEST = True  # True = publication directe sans moderation, False = moderation normale
 
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
