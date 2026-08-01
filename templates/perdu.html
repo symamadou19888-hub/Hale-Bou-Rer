@@ -38,6 +38,10 @@
 
 <h1>🟠 Je cherche un enfant</h1>
 
+{% if erreur_spam %}
+<p style="color:red; text-align:center; font-weight:bold;">⚠️ {{ erreur_spam }}</p>
+{% endif %}
+
 <form method="POST" action="/perdu" enctype="multipart/form-data">
 
     <label>Photo de l'enfant</label><br>

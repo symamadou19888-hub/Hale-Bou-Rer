@@ -4,6 +4,10 @@ from dotenv import load_dotenv
 
 import sqlite3
 import os
+import time
+
+dernieres_publications = {}
+DELAI_MINIMUM = 120  # secondes entre deux publications par IP
 
 load_dotenv()
 
@@ -13,6 +17,16 @@ UPLOAD_FOLDER = "uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 def enregistrer_signalement(type_signalement):
+    ip = request.remote_addr
+    maintenant = time.time()
+
+    if ip in dernieres_publications:
+        temps_ecoule = maintenant - dernieres_publications[ip]
+        if temps_ecoule < DELAI_MINIMUM:
+            return False
+
+    dernieres_publications[ip] = maintenant
+
     prenom = request.form.get("prenom")
     age = request.form.get("age")
     sexe = request.form.get("sexe")
@@ -78,7 +92,9 @@ def accueil():
 @app.route("/trouve", methods=["GET", "POST"])
 def trouve():
     if request.method == "POST":
-        enregistrer_signalement("trouve")
+        resultat = enregistrer_signalement("trouve")
+        if resultat is False:
+            return render_template("trouve.html", erreur_spam="Veuillez patienter avant de publier un nouveau signalement.")
         return redirect("/")
     return render_template("trouve.html")
 
@@ -86,7 +102,9 @@ def trouve():
 @app.route("/perdu", methods=["GET", "POST"])
 def perdu():
     if request.method == "POST":
-        enregistrer_signalement("perdu")
+        resultat = enregistrer_signalement("perdu")
+        if resultat is False:
+            return render_template("perdu.html", erreur_spam="Veuillez patienter avant de publier un nouveau signalement.")
         return redirect("/")
     return render_template("perdu.html")
 
