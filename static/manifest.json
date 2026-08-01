@@ -1,0 +1,21 @@
+{
+  "name": "Halé Bou Rér",
+  "short_name": "HaléBouRér",
+  "description": "Retrouvons nos enfants ensemble",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f5f5",
+  "theme_color": "#2E7D32",
+  "icons": [
+    {
+      "src": "/static/images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/images/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
