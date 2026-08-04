@@ -13,6 +13,35 @@ load_dotenv()
 
 app = Flask(__name__)
 
+try:
+    from pywebpush import webpush
+    PUSH_ACTIF = True
+except ImportError:
+    PUSH_ACTIF = False
+
+
+def envoyer_notifications(titre, message):
+    if not PUSH_ACTIF:
+        return
+
+    conn = sqlite3.connect("database.db")
+    abonnements = conn.execute(
+        "SELECT endpoint FROM subscriptions"
+    ).fetchall()
+    conn.close()
+
+    for abonnement in abonnements:
+        try:
+            webpush(
+                subscription_info={
+                    "endpoint": abonnement[0]
+                },
+                data=message
+            )
+        except Exception:
+            pass
+
+
 UPLOAD_FOLDER = "uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
@@ -72,6 +101,11 @@ def enregistrer_signalement(type_signalement):
 
     conn.commit()
     conn.close()
+
+    envoyer_notifications(
+        "Halé Bou Rér",
+        "Nouveau signalement disponible"
+    )
 
 
 @app.route("/uploads/<filename>")
