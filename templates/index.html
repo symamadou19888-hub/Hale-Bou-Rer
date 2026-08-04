@@ -91,8 +91,28 @@
 document.getElementById("notifBtn").onclick = async function() {
     if ("Notification" in window) {
         let permission = await Notification.requestPermission();
+
         if (permission === "granted") {
+
+            let registration = await navigator.serviceWorker.ready;
+
+            let subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: null
+            });
+
+            await fetch("/subscribe", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    endpoint: subscription.endpoint
+                })
+            });
+
             alert("Notifications activées ✅");
+
         } else {
             alert("Notifications refusées");
         }
