@@ -248,5 +248,25 @@ def detail(id):
     return render_template("detail.html", signalement=signalement)
 
 
+@app.route("/subscribe", methods=["POST"])
+def subscribe():
+    data = request.get_json()
+
+    if not data or "endpoint" not in data:
+        return {"erreur": "abonnement invalide"}, 400
+
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "INSERT INTO subscriptions (endpoint) VALUES (?)",
+        (data["endpoint"],)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return {"message": "abonnement enregistré"}
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
