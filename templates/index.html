@@ -83,7 +83,22 @@
 
 </div>
 
+<button id="notifBtn">
+    🔔 Activer les notifications
+</button>
+
 <script>
+document.getElementById("notifBtn").onclick = async function() {
+    if ("Notification" in window) {
+        let permission = await Notification.requestPermission();
+        if (permission === "granted") {
+            alert("Notifications activées ✅");
+        } else {
+            alert("Notifications refusées");
+        }
+    }
+};
+
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/static/service-worker.js');
 }
