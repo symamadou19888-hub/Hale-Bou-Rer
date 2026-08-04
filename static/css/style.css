@@ -89,15 +89,12 @@ a {
 
 .header {
     text-align: center;
-    background: linear-gradient(135deg, #2E7D32 0%, #43A047 100%);
-    padding: 35px 15px;
+    padding: 15px 15px;
     margin-bottom: 20px;
-    border-radius: 0 0 30px 30px;
-    box-shadow: 0 4px 20px rgba(46,125,50,0.3);
 }
 
 .header img {
-    border-radius: 50%;
+    border-radius: 20px;
     margin-bottom: 10px;
 }
 
