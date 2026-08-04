@@ -167,6 +167,15 @@ def signalements():
     )
 
 
+@app.route("/api/dernier-id")
+def api_dernier_id():
+    conn = sqlite3.connect("database.db")
+    result = conn.execute("SELECT MAX(id) FROM signalements WHERE statut='actif'").fetchone()
+    conn.close()
+    dernier_id = result[0] if result[0] else 0
+    return {"dernier_id": dernier_id}
+
+
 @app.route("/resolu/<int:id>", methods=["POST"])
 def resolu(id):
     conn = sqlite3.connect("database.db")
