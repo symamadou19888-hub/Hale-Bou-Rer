@@ -26,17 +26,26 @@ def envoyer_notifications(titre, message):
 
     conn = sqlite3.connect("database.db")
     abonnements = conn.execute(
-        "SELECT endpoint FROM subscriptions"
+        "SELECT endpoint, p256dh, auth FROM subscriptions"
     ).fetchall()
     conn.close()
+
+    vapid_private_key = os.getenv("VAPID_PRIVATE_KEY")
+    vapid_claim_email = os.getenv("VAPID_CLAIM_EMAIL")
 
     for abonnement in abonnements:
         try:
             webpush(
                 subscription_info={
-                    "endpoint": abonnement[0]
+                    "endpoint": abonnement[0],
+                    "keys": {
+                        "p256dh": abonnement[1],
+                        "auth": abonnement[2]
+                    }
                 },
-                data=message
+                data=message,
+                vapid_private_key=vapid_private_key,
+                vapid_claims={"sub": vapid_claim_email}
             )
         except Exception:
             pass
@@ -282,6 +291,11 @@ def detail(id):
     return render_template("detail.html", signalement=signalement)
 
 
+@app.route("/vapid-public-key")
+def vapid_public_key():
+    return {"publicKey": os.getenv("VAPID_PUBLIC_KEY")}
+
+
 @app.route("/subscribe", methods=["POST"])
 def subscribe():
     data = request.get_json()
@@ -293,8 +307,8 @@ def subscribe():
     cursor = conn.cursor()
 
     cursor.execute(
-        "INSERT INTO subscriptions (endpoint) VALUES (?)",
-        (data["endpoint"],)
+        "INSERT INTO subscriptions (endpoint, p256dh, auth) VALUES (?, ?, ?)",
+        (data["endpoint"], data.get("p256dh"), data.get("auth"))
     )
 
     conn.commit()

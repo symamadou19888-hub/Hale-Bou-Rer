@@ -89,34 +89,59 @@
 
 <script>
 document.getElementById("notifBtn").onclick = async function() {
-    if ("Notification" in window) {
-        let permission = await Notification.requestPermission();
-
-        if (permission === "granted") {
-
-            let registration = await navigator.serviceWorker.ready;
-
-            let subscription = await registration.pushManager.subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: null
-            });
-
-            await fetch("/subscribe", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    endpoint: subscription.endpoint
-                })
-            });
-
-            alert("Notifications activées ✅");
-
-        } else {
-            alert("Notifications refusées");
-        }
+  try {
+    if (!("Notification" in window)) {
+        alert("Notification non supportee");
+        return;
     }
+
+    let permission = await Notification.requestPermission();
+
+    if (permission !== "granted") {
+        alert("Notifications refusees");
+        return;
+    }
+
+    let registration = await navigator.serviceWorker.ready;
+
+    function urlBase64ToUint8Array(base64String) {
+        const padding = "=".repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+        for (let i = 0; i < rawData.length; i++) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+    }
+
+    let vapidResponse = await fetch("/vapid-public-key");
+    let vapidData = await vapidResponse.json();
+
+    let subscription = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(vapidData.publicKey)
+    });
+
+    let subJson = subscription.toJSON();
+
+    await fetch("/subscribe", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            endpoint: subJson.endpoint,
+            p256dh: subJson.keys.p256dh,
+            auth: subJson.keys.auth
+        })
+    });
+
+    alert("Notifications activees");
+
+  } catch (err) {
+    alert("Erreur JS: " + err.message);
+  }
 };
 
 if ('serviceWorker' in navigator) {
