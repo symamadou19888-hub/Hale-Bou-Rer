@@ -97,7 +97,11 @@ var points = [
         lat: {{ signalement[8] }},
         lng: {{ signalement[9] }},
         type: "{{ signalement[1] }}",
-        zone: "{{ signalement[3] }}"
+        zone: "{{ signalement[3] }}",
+        prenom: "{{ signalement[10] or '' }}",
+        age: "{{ signalement[11] or '' }}",
+        photo: "{{ signalement[2] or '' }}",
+        id: {{ signalement[0] }}
     },
     {% endif %}
     {% endfor %}
@@ -105,12 +109,21 @@ var points = [
 
 points.forEach(function(p) {
     var couleur = p.type === "trouve" ? "green" : "orange";
+    var popupHtml = "<div style='text-align:center;'>";
+    if (p.photo) {
+        popupHtml += "<img src='/uploads/" + p.photo + "' style='width:80px;height:80px;object-fit:cover;border-radius:10px;'><br>";
+    }
+    popupHtml += "<b>" + (p.prenom || "Non renseigne") + "</b><br>";
+    if (p.age) {
+        popupHtml += "Age: " + p.age + "<br>";
+    }
+    popupHtml += p.zone;
     L.circleMarker([p.lat, p.lng], {
         color: couleur,
         fillColor: couleur,
         fillOpacity: 0.8,
-        radius: 8
-    }).addTo(carte).bindPopup(p.zone);
+        radius: 9
+    }).addTo(carte).bindPopup(popupHtml);
 });
 </script>
 
