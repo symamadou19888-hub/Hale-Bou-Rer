@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion - Halé Bou Rér</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<button onclick="window.location.href='/'" class="btn-retour">
+←
+</button>
+
+<style>
+.btn-retour {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #2E7D32;
+    border-radius: 50%;
+    background: white;
+    color: #2E7D32;
+    font-size: 25px;
+    font-weight: bold;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.35);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+
+<h1>🔑 Connexion</h1>
+
+{% if erreur %}
+<p style="color:red; text-align:center; font-weight:bold;">⚠️ {{ erreur }}</p>
+{% endif %}
+
+<form method="POST" action="/connexion">
+
+    <label>Email ou téléphone</label><br>
+    <input type="text" name="identifiant" placeholder="Email ou téléphone"><br><br>
+
+    <label>Mot de passe</label><br>
+    <input type="password" name="mot_de_passe" required><br><br>
+
+    <button type="submit">
+        Se connecter
+    </button>
+
+</form>
+
+<br>
+
+<p style="text-align:center;">Pas encore de compte ? <a href="/inscription">Créer un compte</a></p>
+
+<a href="/">⬅ Retour à l'accueil</a>
+
+</body>
+</html>

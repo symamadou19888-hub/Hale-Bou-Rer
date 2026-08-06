@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, send_from_directory
+from flask import Flask, render_template, request, redirect, send_from_directory, session
 from werkzeug.utils import secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
 
 import sqlite3
@@ -317,6 +318,71 @@ def subscribe():
     conn.close()
 
     return {"message": "abonnement enregistré"}
+
+
+@app.route("/inscription", methods=["GET", "POST"])
+def inscription():
+    erreur = None
+    if request.method == "POST":
+        nom = request.form.get("nom")
+        email = request.form.get("email")
+        telephone = request.form.get("telephone")
+        mot_de_passe = request.form.get("mot_de_passe")
+
+        if not mot_de_passe or not (email or telephone):
+            erreur = "Merci de remplir un email ou telephone, et un mot de passe."
+        else:
+            conn = sqlite3.connect(DB_PATH)
+            cursor = conn.cursor()
+            cursor.execute("SELECT id FROM utilisateurs WHERE email=? OR telephone=?", (email, telephone))
+            existant = cursor.fetchone()
+            if existant:
+                erreur = "Un compte existe deja avec cet email ou ce telephone."
+            else:
+                hash_mdp = generate_password_hash(mot_de_passe)
+                cursor.execute(
+                    "INSERT INTO utilisateurs (email, telephone, mot_de_passe_hash, nom) VALUES (?, ?, ?, ?)",
+                    (email, telephone, hash_mdp, nom)
+                )
+                conn.commit()
+                nouvel_id = cursor.lastrowid
+                conn.close()
+                session["user_id"] = nouvel_id
+                session["user_nom"] = nom
+                return redirect("/")
+            conn.close()
+
+    return render_template("inscription.html", erreur=erreur)
+
+
+@app.route("/connexion", methods=["GET", "POST"])
+def connexion():
+    erreur = None
+    if request.method == "POST":
+        identifiant = request.form.get("identifiant")
+        mot_de_passe = request.form.get("mot_de_passe")
+
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, mot_de_passe_hash, nom FROM utilisateurs WHERE email=? OR telephone=?", (identifiant, identifiant))
+        utilisateur = cursor.fetchone()
+        conn.close()
+
+        if utilisateur and check_password_hash(utilisateur[1], mot_de_passe):
+            session["user_id"] = utilisateur[0]
+            session["user_nom"] = utilisateur[2]
+            return redirect("/")
+        else:
+            erreur = "Email/telephone ou mot de passe incorrect."
+
+    return render_template("connexion.html", erreur=erreur)
+
+
+@app.route("/deconnexion")
+def deconnexion():
+    session.clear()
+    return redirect("/")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
