@@ -10,7 +10,7 @@ import time
 dernieres_publications = {}
 DELAI_MINIMUM = 120  # secondes entre deux publications par IP
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
