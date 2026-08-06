@@ -12,6 +12,8 @@ DELAI_MINIMUM = 120  # secondes entre deux publications par IP
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY")
+DB_PATH = os.path.join(os.path.dirname(__file__), "database.db")
 
 try:
     from pywebpush import webpush
@@ -24,7 +26,7 @@ def envoyer_notifications(titre, message):
     if not PUSH_ACTIF:
         return
 
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH)
     abonnements = conn.execute(
         "SELECT endpoint, p256dh, auth FROM subscriptions"
     ).fetchall()
@@ -83,7 +85,7 @@ def enregistrer_signalement(type_signalement):
         nom_photo = secure_filename(photo.filename)
         photo.save("uploads/" + nom_photo)
 
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute(
@@ -124,7 +126,7 @@ def uploaded_file(filename):
 
 @app.route("/")
 def accueil():
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH)
     nb_aujourdhui = conn.execute(
         "SELECT COUNT(*) FROM signalements WHERE statut='actif' AND date(date_creation) = date('now')"
     ).fetchone()[0]
@@ -161,7 +163,7 @@ def signalements():
     age = request.args.get("age", "").strip()
     sexe = request.args.get("sexe", "").strip()
 
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH)
 
     requete = "SELECT * FROM signalements WHERE statut='actif'"
     parametres = []
@@ -212,7 +214,7 @@ def signalements():
 
 @app.route("/api/dernier-id")
 def api_dernier_id():
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH)
     result = conn.execute("SELECT MAX(id) FROM signalements WHERE statut='actif'").fetchone()
     conn.close()
     dernier_id = result[0] if result[0] else 0
@@ -221,7 +223,7 @@ def api_dernier_id():
 
 @app.route("/resolu/<int:id>", methods=["POST"])
 def resolu(id):
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH)
     conn.execute("DELETE FROM signalements WHERE id=?", (id,))
     conn.commit()
     conn.close()
@@ -239,7 +241,7 @@ def admin():
         if mot_de_passe != MOT_DE_PASSE_ADMIN:
             return render_template("admin_login.html", erreur="Mot de passe incorrect")
 
-        conn = sqlite3.connect("database.db")
+        conn = sqlite3.connect(DB_PATH)
         en_attente = conn.execute(
             "SELECT * FROM signalements WHERE statut='en_attente' ORDER BY id DESC"
         ).fetchall()
@@ -255,7 +257,7 @@ def admin_valider(id):
     if mot_de_passe != MOT_DE_PASSE_ADMIN:
         return redirect("/admin")
 
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH)
     conn.execute("UPDATE signalements SET statut='actif' WHERE id=?", (id,))
     conn.commit()
     conn.close()
@@ -268,7 +270,7 @@ def admin_rejeter(id):
     if mot_de_passe != MOT_DE_PASSE_ADMIN:
         return redirect("/admin")
 
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH)
     conn.execute("DELETE FROM signalements WHERE id=?", (id,))
     conn.commit()
     conn.close()
@@ -279,7 +281,7 @@ def admin_rejeter(id):
 
 @app.route("/detail/<int:id>")
 def detail(id):
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM signalements WHERE id=?", (id,))
     signalement = cursor.fetchone()
@@ -303,7 +305,7 @@ def subscribe():
     if not data or "endpoint" not in data:
         return {"erreur": "abonnement invalide"}, 400
 
-    conn = sqlite3.connect("database.db")
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
     cursor.execute(
