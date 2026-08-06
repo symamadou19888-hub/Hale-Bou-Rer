@@ -1,2 +1,5 @@
 .env
 database.db
+private_key.pem
+public_key.pem
+add_secret_key.py
