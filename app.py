@@ -102,7 +102,7 @@ def enregistrer_signalement(type_signalement):
             telephone,
             latitude,
             longitude,
-            "actif" if MODE_TEST else "en_attente",
+            "actif",
             prenom,
             age,
             sexe,
