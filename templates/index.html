@@ -46,6 +46,18 @@
 
 <div class="accueil">
 
+{% if user_nom %}
+<p style="text-align:center; margin:10px 0;">
+    👤 Bonjour <strong>{{ user_nom }}</strong> |
+    <a href="/deconnexion">Se déconnecter</a>
+</p>
+{% else %}
+<p style="text-align:center; margin:10px 0;">
+    <a href="/connexion">Connexion</a> |
+    <a href="/inscription">Créer un compte</a>
+</p>
+{% endif %}
+
 
 {% if nb_aujourdhui and nb_aujourdhui > 0 %}
 <a href="/signalements" style="text-decoration:none;">

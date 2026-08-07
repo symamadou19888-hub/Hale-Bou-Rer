@@ -132,7 +132,7 @@ def accueil():
         "SELECT COUNT(*) FROM signalements WHERE statut='actif' AND date(date_creation) = date('now')"
     ).fetchone()[0]
     conn.close()
-    return render_template("index.html", nb_aujourdhui=nb_aujourdhui)
+    return render_template("index.html", nb_aujourdhui=nb_aujourdhui, user_nom=session.get("user_nom"))
 
 
 @app.route("/trouve", methods=["GET", "POST"])
