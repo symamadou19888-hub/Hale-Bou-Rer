@@ -101,6 +101,17 @@ def enregistrer_signalement(type_signalement):
     latitude = request.form.get("latitude") or None
     longitude = request.form.get("longitude") or None
 
+    site_web = request.form.get("site_web")
+    if site_web:
+        return False
+
+    if not description or len(description.strip()) < 10:
+        return False
+
+    contenu_verif = (description or "").lower()
+    if "http://" in contenu_verif or "https://" in contenu_verif or "www." in contenu_verif:
+        return False
+
     photo = request.files.get("photo")
     nom_photo = None
 
