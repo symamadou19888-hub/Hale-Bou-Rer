@@ -56,21 +56,7 @@ def envoyer_notifications(titre, message):
 
 
 UPLOAD_FOLDER = "uploads"
-    
-EXTENSIONS_AUTORISEES = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
-
-def compresser_image(chemin, qualite=75):
-    try:
-        from PIL import Image
-        image = Image.open(chemin)
-        image.thumbnail((1200, 1200))
-        image.save(chemin, optimize=True, quality=qualite)
-    except Exception as e:
-        print("Erreur compression image:", e)
-
-
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
-app.config["MAX_CONTENT_LENGTH"] = 8 * 1024 * 1024  # 8 Mo max par requete
 
 def enregistrer_signalement(type_signalement):
     ip = request.remote_addr
@@ -138,12 +124,9 @@ def enregistrer_signalement(type_signalement):
             photo.seek(0)
 
             extension = os.path.splitext(secure_filename(photo.filename))[1].lower()
-            if extension not in EXTENSIONS_AUTORISEES:
-                return False
             nom_photo = "enfant_" + str(uuid.uuid4())[:8] + extension
 
             image.save("uploads/" + nom_photo)
-            compresser_image("uploads/" + nom_photo)
 
         except Exception:
             return False
@@ -492,16 +475,8 @@ def modifier(id):
         nom_photo = signalement["photo"]
         if photo and photo.filename:
             extension = os.path.splitext(secure_filename(photo.filename))[1].lower()
-            if extension in EXTENSIONS_AUTORISEES:
-                try:
-                    image_verif = Image.open(photo)
-                    image_verif.verify()
-                    photo.seek(0)
-                    nom_photo = "enfant_" + str(uuid.uuid4())[:8] + extension
-                    photo.save("uploads/" + nom_photo)
-                    compresser_image("uploads/" + nom_photo)
-                except Exception:
-                    pass
+            nom_photo = "enfant_" + str(uuid.uuid4())[:8] + extension
+            photo.save("uploads/" + nom_photo)
 
         conn.execute(
             """
