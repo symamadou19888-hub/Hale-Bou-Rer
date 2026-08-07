@@ -92,8 +92,8 @@ def enregistrer_signalement(type_signalement):
     cursor.execute(
         """
         INSERT INTO signalements
-        (type, photo, zone, description, telephone, latitude, longitude, statut, prenom, age, sexe, ville)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        (type, photo, zone, description, telephone, latitude, longitude, statut, prenom, age, sexe, ville, user_id)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             type_signalement,
@@ -107,7 +107,8 @@ def enregistrer_signalement(type_signalement):
             prenom,
             age,
             sexe,
-            ville
+            ville,
+            session.get("user_id")
         )
     )
 
@@ -382,6 +383,23 @@ def connexion():
 def deconnexion():
     session.clear()
     return redirect("/")
+
+
+
+@app.route("/mes-publications")
+def mes_publications():
+    if not session.get("user_id"):
+        return redirect("/connexion")
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    publications = conn.execute(
+        "SELECT * FROM signalements WHERE user_id=? ORDER BY date_creation DESC",
+        (session.get("user_id"),)
+    ).fetchall()
+    conn.close()
+
+    return render_template("mes_publications.html", publications=publications)
 
 
 if __name__ == "__main__":

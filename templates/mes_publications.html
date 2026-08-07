@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes publications - Halé Bou Rér</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<button onclick="window.location.href='/'" class="btn-retour">
+←
+</button>
+
+<style>
+.btn-retour {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #2E7D32;
+    border-radius: 50%;
+    background: white;
+    color: #2E7D32;
+    font-size: 25px;
+    font-weight: bold;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.35);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+
+<h1>📁 Mes publications</h1>
+
+{% if not publications %}
+<p style="text-align:center; margin-top:30px;">Vous n'avez encore publié aucun signalement.</p>
+{% endif %}
+
+{% for signalement in publications %}
+
+<div class="carte-signalement">
+
+{% if signalement["type"] == "trouve" %}
+<h2 class="trouve">🟢 Enfant trouvé</h2>
+{% else %}
+<h2 class="perdu">🟠 Enfant perdu</h2>
+{% endif %}
+
+{% if signalement["photo"] %}
+<div style="text-align:center; margin-bottom:15px;">
+    <img src="/uploads/{{ signalement['photo'] }}"
+         style="width:100%; max-width:380px; border-radius:20px; box-shadow:0 4px 12px rgba(0,0,0,0.25);">
+</div>
+{% endif %}
+
+{% if signalement["prenom"] %}<p><b>👤 Prénom :</b> {{ signalement["prenom"] }}</p>{% endif %}
+<p><b>📍 Zone :</b> {{ signalement["zone"] }}</p>
+<p><b>📝 Description :</b><br>{{ signalement["description"] }}</p>
+<p><b>📅 Date :</b> {{ signalement["date_creation"] }}</p>
+<p><b>Statut :</b> {{ signalement["statut"] }}</p>
+
+<div style="margin-top:15px;">
+<a href="/detail/{{ signalement['id'] }}">
+<button type="button" style="background:#1976D2;color:white;border:none;padding:10px 15px;border-radius:10px;cursor:pointer;">
+👁 Voir les détails
+</button>
+</a>
+</div>
+
+</div>
+
+{% endfor %}
+
+<br>
+<a href="/">⬅ Retour à l'accueil</a>
+
+</body>
+</html>
