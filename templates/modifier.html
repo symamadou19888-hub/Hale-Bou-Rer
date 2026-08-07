@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier - Halé Bou Rér</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<button onclick="window.location.href='/mes-publications'" class="btn-retour">
+←
+</button>
+
+<style>
+.btn-retour {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #2E7D32;
+    border-radius: 50%;
+    background: white;
+    color: #2E7D32;
+    font-size: 25px;
+    font-weight: bold;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.35);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.form-modifier {
+    max-width: 400px;
+    margin: 60px auto 30px auto;
+    padding: 0 15px;
+}
+.form-modifier label {
+    display: block;
+    margin-top: 12px;
+    font-weight: bold;
+}
+.form-modifier input, .form-modifier textarea, .form-modifier select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    box-sizing: border-box;
+}
+.btn-enregistrer {
+    background: #2E7D32;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    width: 100%;
+    margin-top: 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+</style>
+
+<h1 style="text-align:center;">✏️ Modifier ma publication</h1>
+
+<form class="form-modifier" method="POST" enctype="multipart/form-data">
+
+<label>👤 Prénom</label>
+<input type="text" name="prenom" value="{{ signalement['prenom'] or '' }}">
+
+<label>🎂 Âge</label>
+<input type="number" name="age" value="{{ signalement['age'] or '' }}">
+
+<label>⚧ Sexe</label>
+<select name="sexe">
+    <option value="M" {% if signalement['sexe'] == 'M' %}selected{% endif %}>Masculin</option>
+    <option value="F" {% if signalement['sexe'] == 'F' %}selected{% endif %}>Féminin</option>
+</select>
+
+<label>🏙️ Ville</label>
+<input type="text" name="ville" value="{{ signalement['ville'] or '' }}">
+
+<label>📍 Zone / Quartier</label>
+<input type="text" name="zone" value="{{ signalement['zone'] or '' }}">
+
+<label>📝 Description</label>
+<textarea name="description" rows="4">{{ signalement['description'] or '' }}</textarea>
+
+<label>📞 Téléphone</label>
+<input type="text" name="telephone" value="{{ signalement['telephone'] or '' }}">
+
+<label>📷 Changer la photo (optionnel)</label>
+<input type="file" name="photo" accept="image/*">
+
+<button type="submit" class="btn-enregistrer">💾 Enregistrer les modifications</button>
+
+</form>
+
+</body>
+</html>

@@ -402,5 +402,52 @@ def mes_publications():
     return render_template("mes_publications.html", publications=publications)
 
 
+@app.route("/modifier/<int:id>", methods=["GET", "POST"])
+def modifier(id):
+    if not session.get("user_id"):
+        return redirect("/connexion")
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+
+    signalement = conn.execute(
+        "SELECT * FROM signalements WHERE id=?", (id,)
+    ).fetchone()
+
+    if not signalement or signalement["user_id"] != session.get("user_id"):
+        conn.close()
+        return redirect("/mes-publications")
+
+    if request.method == "POST":
+        prenom = request.form.get("prenom")
+        age = request.form.get("age")
+        sexe = request.form.get("sexe")
+        ville = request.form.get("ville")
+        zone = request.form.get("zone")
+        description = request.form.get("description")
+        telephone = request.form.get("telephone")
+
+        photo = request.files.get("photo")
+        nom_photo = signalement["photo"]
+        if photo and photo.filename:
+            nom_photo = secure_filename(photo.filename)
+            photo.save("uploads/" + nom_photo)
+
+        conn.execute(
+            """
+            UPDATE signalements
+            SET prenom=?, age=?, sexe=?, ville=?, zone=?, description=?, telephone=?, photo=?
+            WHERE id=? AND user_id=?
+            """,
+            (prenom, age, sexe, ville, zone, description, telephone, nom_photo, id, session.get("user_id"))
+        )
+        conn.commit()
+        conn.close()
+        return redirect("/mes-publications")
+
+    conn.close()
+    return render_template("modifier.html", signalement=signalement)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
