@@ -472,5 +472,28 @@ def supprimer_publication(id):
     return redirect("/mes-publications")
 
 
+@app.route("/marquer-retrouve/<int:id>", methods=["POST"])
+def marquer_retrouve(id):
+    if not session.get("user_id"):
+        return redirect("/connexion")
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+
+    signalement = conn.execute(
+        "SELECT * FROM signalements WHERE id=?", (id,)
+    ).fetchone()
+
+    if signalement and signalement["user_id"] == session.get("user_id"):
+        conn.execute(
+            "UPDATE signalements SET type='trouve' WHERE id=? AND user_id=?",
+            (id, session.get("user_id"))
+        )
+        conn.commit()
+
+    conn.close()
+    return redirect("/mes-publications")
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

@@ -79,6 +79,13 @@
 🗑 Supprimer
 </button>
 </form>
+{% if signalement["type"] == "perdu" %}
+<form method="POST" action="/marquer-retrouve/{{ signalement['id'] }}" style="display:inline;" onsubmit="return confirm('Confirmer que cet enfant a été retrouvé ?');">
+<button type="submit" style="background:#2E7D32;color:white;border:none;padding:10px 15px;border-radius:10px;cursor:pointer;margin-left:8px;">
+✅ Marquer comme retrouvé
+</button>
+</form>
+{% endif %}
 </div>
 
 </div>
