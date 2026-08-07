@@ -61,6 +61,28 @@ def enregistrer_signalement(type_signalement):
     ip = request.remote_addr
     maintenant = time.time()
 
+    # Limite quotidienne anti-abus
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    if session.get("user_id"):
+        limite = 10
+        cursor.execute(
+            "SELECT COUNT(*) FROM signalements WHERE user_id=? AND date(date_creation)=date('now')",
+            (session.get("user_id"),)
+        )
+    else:
+        limite = 5
+        cursor.execute(
+            "SELECT COUNT(*) FROM signalements WHERE date(date_creation)=date('now')",
+        )
+
+    nombre_aujourd_hui = cursor.fetchone()[0]
+    conn.close()
+
+    if nombre_aujourd_hui >= limite:
+        return False
+
     if ip in dernieres_publications:
         temps_ecoule = maintenant - dernieres_publications[ip]
         if temps_ecoule < DELAI_MINIMUM:
