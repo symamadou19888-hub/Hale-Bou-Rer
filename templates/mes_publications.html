@@ -74,6 +74,11 @@
 ✏️ Modifier
 </button>
 </a>
+<form method="POST" action="/supprimer/{{ signalement['id'] }}" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cette publication ?');">
+<button type="submit" style="background:#C62828;color:white;border:none;padding:10px 15px;border-radius:10px;cursor:pointer;margin-left:8px;">
+🗑 Supprimer
+</button>
+</form>
 </div>
 
 </div>
