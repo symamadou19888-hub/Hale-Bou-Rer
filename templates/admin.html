@@ -51,6 +51,15 @@
 <h2 class="perdu">🟠 Enfant perdu</h2>
 {% endif %}
 
+{% if infos_abus.get(signalement[0]) %}
+<div style="background:#ffebee;border-left:4px solid #c62828;padding:10px;border-radius:8px;margin-bottom:10px;">
+🚩 <b>{{ infos_abus[signalement[0]].nombre }} signalement(s) d'abus</b>
+{% if infos_abus[signalement[0]].raisons %}
+<br><i>Raisons : {{ infos_abus[signalement[0]].raisons | join(", ") }}</i>
+{% endif %}
+</div>
+{% endif %}
+
 {% if signalement[2] %}<img src="/uploads/{{ signalement[2] }}" width="200" style="border-radius:15px;"><br><br>{% endif %}
 
 {% if signalement[10] %}<p><b>👤 Prénom :</b> {{ signalement[10] }}</p>{% endif %}

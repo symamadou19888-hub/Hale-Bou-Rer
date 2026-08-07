@@ -310,11 +310,24 @@ def admin():
 
     if session.get("admin_connecte"):
         conn = sqlite3.connect(DB_PATH)
+        conn.row_factory = sqlite3.Row
         en_attente = conn.execute(
             "SELECT * FROM signalements WHERE statut='en_attente' ORDER BY id DESC"
         ).fetchall()
+
+        infos_abus = {}
+        for s in en_attente:
+            lignes = conn.execute(
+                "SELECT raison FROM abus WHERE signalement_id=?", (s["id"],)
+            ).fetchall()
+            if lignes:
+                infos_abus[s["id"]] = {
+                    "nombre": len(lignes),
+                    "raisons": [l["raison"] for l in lignes if l["raison"]]
+                }
+
         conn.close()
-        return render_template("admin.html", signalements=en_attente)
+        return render_template("admin.html", signalements=en_attente, infos_abus=infos_abus)
 
     if request.method == "POST":
         if ip in tentatives_admin:
@@ -571,6 +584,40 @@ def supprimer_publication(id):
 
     conn.close()
     return redirect("/mes-publications")
+
+
+@app.route("/signaler-abus/<int:id>", methods=["POST"])
+def signaler_abus(id):
+    ip = request.remote_addr
+    raison = request.form.get("raison", "")
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+
+    deja_signale = conn.execute(
+        "SELECT * FROM abus WHERE signalement_id=? AND ip=?", (id, ip)
+    ).fetchone()
+
+    if not deja_signale:
+        conn.execute(
+            "INSERT INTO abus (signalement_id, ip, raison) VALUES (?, ?, ?)",
+            (id, ip, raison)
+        )
+        conn.commit()
+
+        nb = conn.execute(
+            "SELECT COUNT(DISTINCT ip) as total FROM abus WHERE signalement_id=?",
+            (id,)
+        ).fetchone()["total"]
+
+        if nb >= 3:
+            conn.execute(
+                "UPDATE signalements SET statut='en_attente' WHERE id=?", (id,)
+            )
+            conn.commit()
+
+    conn.close()
+    return redirect(request.referrer or "/")
 
 
 @app.route("/marquer-retrouve/<int:id>", methods=["POST"])

@@ -97,6 +97,12 @@ L.marker([
 📤 Partager ce signalement
 </button>
 
+<form action="/signaler-abus/{{ signalement[0] }}" method="POST" style="display:inline;margin-left:10px;" onsubmit="return confirm('Signaler ce post comme suspect ou abusif ?');">
+<button type="submit" style="background:#c62828;color:white;border:none;padding:12px 20px;border-radius:10px;font-size:16px;cursor:pointer;">
+🚩 Signaler ce post
+</button>
+</form>
+
 <script>
 function partagerSignalement() {
     if (navigator.share) {
