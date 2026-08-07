@@ -142,6 +142,7 @@ def enregistrer_signalement(type_signalement):
                 return False
             nom_photo = "enfant_" + str(uuid.uuid4())[:8] + extension
 
+            image = Image.open(photo)
             image.save("uploads/" + nom_photo)
             compresser_image("uploads/" + nom_photo)
 
