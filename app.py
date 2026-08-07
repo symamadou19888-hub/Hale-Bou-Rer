@@ -14,7 +14,6 @@ load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
 app = Flask(__name__)
 app.secret_key = "hale-bou-rer-cle-secrete-2026"
-app.secret_key = os.getenv("SECRET_KEY")
 DB_PATH = os.path.join(os.path.dirname(__file__), "database.db")
 
 try:
