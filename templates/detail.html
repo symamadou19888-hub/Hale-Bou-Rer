@@ -5,39 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Détail du signalement</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-
-<button onclick="window.location.href='/'" class="btn-retour">
-←
-</button>
 
 <style>
-.btn-retour {
-    position: fixed;
-    top: 12px;
-    left: 12px;
-    width: 40px;
-    height: 40px;
-    border: 2px solid #2E7D32;
-    border-radius: 50%;
-    background: white;
-    color: #2E7D32;
-    font-size: 25px;
-    font-weight: bold;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.35);
-    z-index: 99999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
+.flash-message {
+    background: #2E7D32;
+    color: white;
+    padding: 12px;
+    margin: 15px;
+    border-radius: 8px;
+    text-align: center;
 }
 </style>
 
+</head>
+<body>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="flash-message">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 
-<button onclick="history.back()" style="position:fixed;top:15px;left:15px;padding:10px 15px;border:none;border-radius:10px;background:#2E7D32;color:white;cursor:pointer;">
-⬅ Retour
-</button>
+
+
 
 <div style="max-width:700px;margin:70px auto;padding:20px;">
 
