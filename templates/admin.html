@@ -63,12 +63,12 @@
 <p><b>📅 Date :</b> {{ signalement[6] }}</p>
 
 <form method="POST" action="/admin/valider/{{ signalement[0] }}" style="display:inline;">
-    <input type="hidden" name="mot_de_passe" value="{{ mot_de_passe }}">
+    
     <button type="submit" style="background:#2E7D32; color:white;">✅ Valider</button>
 </form>
 
 <form method="POST" action="/admin/rejeter/{{ signalement[0] }}" style="display:inline;">
-    <input type="hidden" name="mot_de_passe" value="{{ mot_de_passe }}">
+    
     <button type="submit" style="background:#c62828; color:white;">❌ Rejeter</button>
 </form>
 

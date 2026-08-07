@@ -298,27 +298,58 @@ MOT_DE_PASSE_ADMIN = os.getenv("MOT_DE_PASSE_ADMIN")
 
 MODE_TEST = True  # True = publication directe sans moderation, False = moderation normale
 
+tentatives_admin = {}
+DELAI_BLOCAGE_ADMIN = 300  # 5 minutes de blocage apres 5 echecs
+MAX_TENTATIVES_ADMIN = 5
+
+
 @app.route("/admin", methods=["GET", "POST"])
 def admin():
+    ip = request.remote_addr
+    maintenant = time.time()
+
+    if session.get("admin_connecte"):
+        conn = sqlite3.connect(DB_PATH)
+        en_attente = conn.execute(
+            "SELECT * FROM signalements WHERE statut='en_attente' ORDER BY id DESC"
+        ).fetchall()
+        conn.close()
+        return render_template("admin.html", signalements=en_attente)
+
     if request.method == "POST":
+        if ip in tentatives_admin:
+            nb_echecs, dernier_echec = tentatives_admin[ip]
+            if nb_echecs >= MAX_TENTATIVES_ADMIN and (maintenant - dernier_echec) < DELAI_BLOCAGE_ADMIN:
+                return render_template("admin_login.html", erreur="Trop de tentatives. Reessayez dans quelques minutes.")
+
         mot_de_passe = request.form.get("mot_de_passe")
         if mot_de_passe != MOT_DE_PASSE_ADMIN:
+            nb_echecs = tentatives_admin.get(ip, (0, 0))[0] + 1
+            tentatives_admin[ip] = (nb_echecs, maintenant)
             return render_template("admin_login.html", erreur="Mot de passe incorrect")
+
+        tentatives_admin.pop(ip, None)
+        session["admin_connecte"] = True
 
         conn = sqlite3.connect(DB_PATH)
         en_attente = conn.execute(
             "SELECT * FROM signalements WHERE statut='en_attente' ORDER BY id DESC"
         ).fetchall()
         conn.close()
-        return render_template("admin.html", signalements=en_attente, mot_de_passe=mot_de_passe)
+        return render_template("admin.html", signalements=en_attente)
 
     return render_template("admin_login.html", erreur=None)
 
 
+@app.route("/admin/deconnexion")
+def admin_deconnexion():
+    session.pop("admin_connecte", None)
+    return redirect("/admin")
+
+
 @app.route("/admin/valider/<int:id>", methods=["POST"])
 def admin_valider(id):
-    mot_de_passe = request.form.get("mot_de_passe")
-    if mot_de_passe != MOT_DE_PASSE_ADMIN:
+    if not session.get("admin_connecte"):
         return redirect("/admin")
 
     conn = sqlite3.connect(DB_PATH)
@@ -330,8 +361,7 @@ def admin_valider(id):
 
 @app.route("/admin/rejeter/<int:id>", methods=["POST"])
 def admin_rejeter(id):
-    mot_de_passe = request.form.get("mot_de_passe")
-    if mot_de_passe != MOT_DE_PASSE_ADMIN:
+    if not session.get("admin_connecte"):
         return redirect("/admin")
 
     conn = sqlite3.connect(DB_PATH)
