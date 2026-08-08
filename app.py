@@ -13,9 +13,18 @@ DELAI_MINIMUM = 120  # secondes entre deux publications par IP
 
 load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
+
 app = Flask(__name__)
 app.secret_key = "hale-bou-rer-cle-secrete-2026"
 DB_PATH = os.path.join(os.path.dirname(__file__), "database.db")
+
+
+@app.route("/service-worker.js")
+def service_worker():
+    response = send_from_directory("static", "service-worker.js")
+    response.headers["Service-Worker-Allowed"] = "/"
+    response.headers["Content-Type"] = "application/javascript"
+    return response
 
 try:
     from pywebpush import webpush
