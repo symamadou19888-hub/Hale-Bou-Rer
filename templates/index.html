@@ -101,25 +101,36 @@
 </button>
 
 <script>
+function logStatut(msg) {
+    let div = document.getElementById("statutNotif");
+    if (!div) {
+        div = document.createElement("div");
+        div.id = "statutNotif";
+        div.style = "background:#eee;padding:10px;margin:10px;border-radius:8px;font-size:14px;white-space:pre-wrap;";
+        document.body.appendChild(div);
+    }
+    div.textContent += msg + "\n";
+}
+
 document.getElementById("notifBtn").onclick = async function() {
-  alert("Etape 1 : clic detecte");
+  logStatut("Etape 1 : clic detecte");
   try {
     if (!("Notification" in window)) {
-        alert("Notification non supportee");
+        logStatut("Notification non supportee");
         return;
     }
-    alert("Etape 2 : Notification API disponible");
+    logStatut("Etape 2 : Notification API disponible, permission actuelle = " + Notification.permission);
 
     let permission = await Notification.requestPermission();
 
     if (permission !== "granted") {
-        alert("Notifications refusees");
+        logStatut("Notifications refusees, valeur = " + permission);
         return;
     }
 
-    alert("Etape 3 : permission = " + permission);
+    logStatut("Etape 3 : permission = " + permission);
     let registration = await navigator.serviceWorker.ready;
-    alert("Etape 4 : service worker pret");
+    logStatut("Etape 4 : service worker pret");
 
     function urlBase64ToUint8Array(base64String) {
         const padding = "=".repeat((4 - base64String.length % 4) % 4);
@@ -134,7 +145,7 @@ document.getElementById("notifBtn").onclick = async function() {
 
     let vapidResponse = await fetch("/vapid-public-key");
     let vapidData = await vapidResponse.json();
-    alert("Etape 5 : cle vapid recuperee = " + vapidData.publicKey);
+    logStatut("Etape 5 : cle vapid recuperee");
 
     let subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
@@ -155,10 +166,10 @@ document.getElementById("notifBtn").onclick = async function() {
         })
     });
 
-    alert("Notifications activees");
+    logStatut("Etape 6 : Notifications activees avec succes");
 
   } catch (err) {
-    alert("Erreur JS: " + err.message);
+    logStatut("ERREUR JS : " + err.message);
   }
 };
 
