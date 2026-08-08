@@ -102,13 +102,11 @@
 
 <script>
 document.getElementById("notifBtn").onclick = async function() {
-  alert("Etape 1 : clic detecte");
   try {
     if (!("Notification" in window)) {
         alert("Notification non supportee");
         return;
     }
-    alert("Etape 2 : Notification API disponible");
 
     let permission = await Notification.requestPermission();
 
@@ -117,9 +115,7 @@ document.getElementById("notifBtn").onclick = async function() {
         return;
     }
 
-    alert("Etape 3 : permission = " + permission);
     let registration = await navigator.serviceWorker.ready;
-    alert("Etape 4 : service worker pret");
 
     function urlBase64ToUint8Array(base64String) {
         const padding = "=".repeat((4 - base64String.length % 4) % 4);
@@ -134,7 +130,6 @@ document.getElementById("notifBtn").onclick = async function() {
 
     let vapidResponse = await fetch("/vapid-public-key");
     let vapidData = await vapidResponse.json();
-    alert("Etape 5 : cle vapid recuperee = " + vapidData.publicKey);
 
     let subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,

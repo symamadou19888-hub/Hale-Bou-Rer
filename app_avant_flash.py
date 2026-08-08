@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, send_from_directory, session, flash, url_for
+from flask import Flask, render_template, request, redirect, send_from_directory, session
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from dotenv import load_dotenv
@@ -312,10 +312,7 @@ def admin():
         conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         en_attente = conn.execute(
-            """SELECT * FROM signalements
-               WHERE statut='en_attente'
-               OR id IN (SELECT signalement_id FROM abus)
-               ORDER BY id DESC"""
+            "SELECT * FROM signalements WHERE statut='en_attente' ORDER BY id DESC"
         ).fetchall()
 
         infos_abus = {}
@@ -620,9 +617,7 @@ def signaler_abus(id):
             conn.commit()
 
     conn.close()
-    flash("✅ Signalement envoyé avec succès.", "success")
-    print("FLASH AJOUTE")
-    return redirect(url_for("detail", id=id))
+    return redirect(request.referrer or "/")
 
 
 @app.route("/marquer-retrouve/<int:id>", methods=["POST"])

@@ -312,10 +312,7 @@ def admin():
         conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
         en_attente = conn.execute(
-            """SELECT * FROM signalements
-               WHERE statut='en_attente'
-               OR id IN (SELECT signalement_id FROM abus)
-               ORDER BY id DESC"""
+            "SELECT * FROM signalements WHERE statut='en_attente' ORDER BY id DESC"
         ).fetchall()
 
         infos_abus = {}
