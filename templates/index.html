@@ -129,6 +129,16 @@ document.getElementById("notifBtn").onclick = async function() {
     }
 
     logStatut("Etape 3 : permission = " + permission);
+
+    let regExistante = await navigator.serviceWorker.getRegistration();
+    if (regExistante) {
+        logStatut("Registration existante trouvee. active=" + !!regExistante.active + " installing=" + !!regExistante.installing + " waiting=" + !!regExistante.waiting);
+    } else {
+        logStatut("Aucune registration existante, on enregistre maintenant");
+        regExistante = await navigator.serviceWorker.register('/static/service-worker.js');
+        logStatut("register() termine. active=" + !!regExistante.active + " installing=" + !!regExistante.installing + " waiting=" + !!regExistante.waiting);
+    }
+
     let registration = await navigator.serviceWorker.ready;
     logStatut("Etape 4 : service worker pret");
 
