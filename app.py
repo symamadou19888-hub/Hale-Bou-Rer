@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 import sqlite3
 import os
+import json
 import time
 import uuid
 from PIL import Image
@@ -192,7 +193,7 @@ def enregistrer_signalement(type_signalement):
 
     envoyer_notifications(
         "Halé Bou Rér",
-        "Nouveau signalement disponible"
+        json.dumps({"title": "Halé Bou Rér", "body": "Nouveau signalement disponible"})
     )
 
 
