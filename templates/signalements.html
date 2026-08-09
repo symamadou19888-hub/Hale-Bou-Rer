@@ -127,6 +127,7 @@ points.forEach(function(p) {
         popupHtml += "Age: " + p.age + "<br>";
     }
     popupHtml += p.zone;
+    popupHtml += "<br><a href='/detail/" + p.id + "' style='color:#2E7D32; font-weight:bold;'>Voir le signalement</a>";
     var marqueur = L.circleMarker([p.lat, p.lng], {
         color: couleur,
         fillColor: couleur,
