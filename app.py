@@ -47,7 +47,6 @@ def envoyer_notifications(titre, message):
     vapid_private_key = os.getenv("VAPID_PRIVATE_KEY")
     vapid_claim_email = os.getenv("VAPID_CLAIM_EMAIL")
 
-    print(f"[PUSH] {len(abonnements)} abonnement(s) trouve(s)")
     for abonnement in abonnements:
         try:
             webpush(
@@ -62,11 +61,8 @@ def envoyer_notifications(titre, message):
                 vapid_private_key=vapid_private_key,
                 vapid_claims={"sub": vapid_claim_email}
             )
-            print("[PUSH] Notification envoyee avec succes")
         except Exception as e:
-            import traceback
             print(f"[PUSH] ERREUR : {e}")
-            print(traceback.format_exc())
 
 
 UPLOAD_FOLDER = "uploads"

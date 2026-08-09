@@ -102,14 +102,7 @@
 
 <script>
 function logStatut(msg) {
-    let div = document.getElementById("statutNotif");
-    if (!div) {
-        div = document.createElement("div");
-        div.id = "statutNotif";
-        div.style = "background:#eee;padding:10px;margin:10px;border-radius:8px;font-size:14px;white-space:pre-wrap;";
-        document.body.appendChild(div);
-    }
-    div.textContent += msg + "\n";
+    console.log("[Notifications] " + msg);
 }
 
 document.getElementById("notifBtn").onclick = async function() {
