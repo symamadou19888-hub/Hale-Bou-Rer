@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 </head>
 
 <body>
@@ -94,6 +97,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap'
 }).addTo(carte);
 
+var groupeMarqueurs = L.markerClusterGroup();
+
 var points = [
     {% for signalement in signalements %}
     {% if signalement[8] and signalement[9] %}
@@ -122,13 +127,15 @@ points.forEach(function(p) {
         popupHtml += "Age: " + p.age + "<br>";
     }
     popupHtml += p.zone;
-    L.circleMarker([p.lat, p.lng], {
+    var marqueur = L.circleMarker([p.lat, p.lng], {
         color: couleur,
         fillColor: couleur,
         fillOpacity: 0.8,
         radius: 9
-    }).addTo(carte).bindPopup(popupHtml);
+    }).bindPopup(popupHtml);
+    groupeMarqueurs.addLayer(marqueur);
 });
+carte.addLayer(groupeMarqueurs);
 </script>
 
 {% for signalement in signalements %}
