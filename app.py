@@ -63,7 +63,9 @@ def envoyer_notifications(titre, message):
             )
             print("[PUSH] Notification envoyee avec succes")
         except Exception as e:
+            import traceback
             print(f"[PUSH] ERREUR : {e}")
+            print(traceback.format_exc())
 
 
 UPLOAD_FOLDER = "uploads"
