@@ -137,6 +137,10 @@ points.forEach(function(p) {
     groupeMarqueurs.addLayer(marqueur);
 });
 carte.addLayer(groupeMarqueurs);
+
+if (points.length > 0) {
+    carte.fitBounds(groupeMarqueurs.getBounds(), { padding: [30, 30] });
+}
 </script>
 
 {% for signalement in signalements %}
