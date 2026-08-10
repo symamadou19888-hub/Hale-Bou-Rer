@@ -80,15 +80,19 @@
     border-bottom: none;
 }
 .ligne-info .icone {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
     background: #F7F5F0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 19px;
     flex-shrink: 0;
+}
+.ligne-info .texte {
+    flex: 1;
+    min-width: 0;
 }
 .ligne-info .texte .label {
     font-size: 11px;
@@ -100,6 +104,8 @@
     font-size: 15px;
     color: #1A1A1A;
     font-weight: 500;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 .badge-pub {
     display: inline-block;
