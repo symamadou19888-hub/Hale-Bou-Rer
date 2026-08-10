@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier - Halé Bou Rér</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
-<body>
+<body style="background:#F7F5F0; font-family:'Inter', sans-serif; margin:0;">
 
 <button onclick="window.location.href='/mes-publications'" class="btn-retour">
 ←
@@ -31,39 +34,69 @@
     z-index: 999;
     line-height: 1;
 }
-.form-modifier {
-    max-width: 400px;
-    margin: 60px auto 30px auto;
-    padding: 0 15px;
+.titre-modifier {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1B5E20;
+    text-align: center;
+    margin: 70px 0 20px 0;
+}
+.carte-formulaire {
+    max-width: 420px;
+    margin: 0 auto 40px auto;
+    padding: 25px 20px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
 }
 .form-modifier label {
     display: block;
-    margin-top: 12px;
-    font-weight: bold;
+    margin-top: 14px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #333;
 }
-.form-modifier input, .form-modifier textarea, .form-modifier select {
+.form-modifier input,
+.form-modifier textarea,
+.form-modifier select {
     width: 100%;
-    padding: 10px;
+    padding: 11px;
     border-radius: 10px;
-    border: 1px solid #ccc;
-    margin-top: 5px;
+    border: 1px solid #ddd;
+    margin-top: 6px;
     box-sizing: border-box;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    background: #F7F5F0;
+}
+.form-modifier input:focus,
+.form-modifier textarea:focus,
+.form-modifier select:focus {
+    outline: none;
+    border-color: #1B5E20;
 }
 .btn-enregistrer {
-    background: #2E7D32;
+    background: #1B5E20;
     color: white;
     border: none;
-    padding: 12px;
+    padding: 14px;
     border-radius: 10px;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 22px;
     font-size: 16px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
     cursor: pointer;
+}
+.btn-enregistrer:active {
+    opacity: 0.85;
 }
 </style>
 
-<h1 style="text-align:center;">✏️ Modifier ma publication</h1>
+<h1 class="titre-modifier">✏️ Modifier ma publication</h1>
 
+<div class="carte-formulaire">
 <form class="form-modifier" method="POST" enctype="multipart/form-data">
 
 <label>👤 Prénom</label>
@@ -96,6 +129,7 @@
 <button type="submit" class="btn-enregistrer">💾 Enregistrer les modifications</button>
 
 </form>
+</div>
 
 </body>
 </html>
