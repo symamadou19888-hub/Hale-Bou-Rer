@@ -65,6 +65,38 @@ def envoyer_notifications(titre, message):
             print(f"[PUSH] ERREUR : {e}")
 
 
+def envoyer_notification_utilisateur(user_id, titre, message):
+    if not PUSH_ACTIF:
+        return
+
+    conn = sqlite3.connect(DB_PATH)
+    abonnements = conn.execute(
+        "SELECT endpoint, p256dh, auth FROM subscriptions WHERE user_id=?",
+        (user_id,)
+    ).fetchall()
+    conn.close()
+
+    vapid_private_key = os.getenv("VAPID_PRIVATE_KEY")
+    vapid_claim_email = os.getenv("VAPID_CLAIM_EMAIL")
+
+    for abonnement in abonnements:
+        try:
+            webpush(
+                subscription_info={
+                    "endpoint": abonnement[0],
+                    "keys": {
+                        "p256dh": abonnement[1],
+                        "auth": abonnement[2]
+                    }
+                },
+                data=message,
+                vapid_private_key=vapid_private_key,
+                vapid_claims={"sub": vapid_claim_email}
+            )
+        except Exception as e:
+            print(f"[PUSH] ERREUR : {e}")
+
+
 UPLOAD_FOLDER = "uploads"
     
 EXTENSIONS_AUTORISEES = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
@@ -478,6 +510,105 @@ def detail(id):
     return render_template("detail.html", signalement=signalement)
 
 
+@app.route("/contacter/<int:signalement_id>", methods=["GET", "POST"])
+def contacter(signalement_id):
+    if not session.get("user_id"):
+        return redirect("/connexion")
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+
+    signalement = conn.execute(
+        "SELECT * FROM signalements WHERE id=?", (signalement_id,)
+    ).fetchone()
+
+    if signalement is None:
+        conn.close()
+        return "Signalement introuvable", 404
+
+    proprietaire_id = signalement["user_id"]
+
+    if proprietaire_id is None:
+        conn.close()
+        return "Ce signalement n'a pas de proprietaire identifiable", 400
+
+    if proprietaire_id == session["user_id"]:
+        conn.close()
+        return redirect(f"/detail/{signalement_id}")
+
+    if request.method == "POST":
+        contenu_msg = request.form.get("contenu", "").strip()
+        if contenu_msg:
+            conn.execute(
+                "INSERT INTO messages (signalement_id, expediteur_id, destinataire_id, contenu) VALUES (?, ?, ?, ?)",
+                (signalement_id, session["user_id"], proprietaire_id, contenu_msg)
+            )
+            conn.commit()
+            envoyer_notification_utilisateur(
+                proprietaire_id,
+                "Nouveau message",
+                "Vous avez recu un nouveau message a propos d'un signalement."
+            )
+
+    messages = conn.execute(
+        """SELECT m.*, u.nom AS nom_expediteur
+           FROM messages m
+           JOIN utilisateurs u ON m.expediteur_id = u.id
+           WHERE m.signalement_id=?
+           AND ((m.expediteur_id=? AND m.destinataire_id=?)
+           OR (m.expediteur_id=? AND m.destinataire_id=?))
+           ORDER BY m.date_envoi ASC""",
+        (signalement_id, session["user_id"], proprietaire_id, proprietaire_id, session["user_id"])
+    ).fetchall()
+
+    conn.execute(
+        "UPDATE messages SET lu=1 WHERE signalement_id=? AND destinataire_id=?",
+        (signalement_id, session["user_id"])
+    )
+    conn.commit()
+    conn.close()
+
+    return render_template(
+        "conversation.html",
+        messages=messages,
+        signalement=signalement,
+        user_id=session["user_id"]
+    )
+
+
+@app.route("/mes-conversations")
+def mes_conversations():
+    if not session.get("user_id"):
+        return redirect("/connexion")
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+
+    conversations = conn.execute(
+        """SELECT
+             m.signalement_id,
+             s.prenom, s.ville, s.type, s.photo,
+             MAX(m.date_envoi) AS dernier_message_date,
+             (SELECT contenu FROM messages m2
+                WHERE m2.signalement_id = m.signalement_id
+                AND (m2.expediteur_id=? OR m2.destinataire_id=?)
+                ORDER BY m2.date_envoi DESC LIMIT 1) AS dernier_contenu,
+             SUM(CASE WHEN m.destinataire_id=? AND m.lu=0 THEN 1 ELSE 0 END) AS non_lus,
+             CASE WHEN s.user_id=? THEN m.expediteur_id ELSE s.user_id END AS autre_id
+           FROM messages m
+           JOIN signalements s ON m.signalement_id = s.id
+           WHERE m.expediteur_id=? OR m.destinataire_id=?
+           GROUP BY m.signalement_id
+           ORDER BY dernier_message_date DESC""",
+        (session["user_id"], session["user_id"], session["user_id"], session["user_id"],
+         session["user_id"], session["user_id"])
+    ).fetchall()
+
+    conn.close()
+
+    return render_template("mes_conversations.html", conversations=conversations)
+
+
 @app.route("/vapid-public-key")
 def vapid_public_key():
     return {"publicKey": os.getenv("VAPID_PUBLIC_KEY")}
@@ -494,8 +625,8 @@ def subscribe():
     cursor = conn.cursor()
 
     cursor.execute(
-        "INSERT INTO subscriptions (endpoint, p256dh, auth) VALUES (?, ?, ?)",
-        (data["endpoint"], data.get("p256dh"), data.get("auth"))
+        "INSERT INTO subscriptions (endpoint, p256dh, auth, user_id) VALUES (?, ?, ?, ?)",
+        (data["endpoint"], data.get("p256dh"), data.get("auth"), session.get("user_id"))
     )
 
     conn.commit()

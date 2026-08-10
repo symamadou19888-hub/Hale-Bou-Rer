@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes conversations - Halé Bou Rér</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body style="background:#F7F5F0; margin:0;">
+
+<a href="/" class="btn-retour">←</a>
+
+<style>
+.btn-retour {
+    position: fixed;
+    top: -10px;
+    left: -8px;
+    color: #1B5E20;
+    font-size: 76px;
+    text-decoration: none;
+    line-height: 1;
+    z-index: 999;
+}
+
+.entete {
+    text-align: center;
+    padding: 70px 15px 20px;
+}
+
+.entete h1 {
+    color: #1B5E20;
+    font-size: 24px;
+    margin: 0;
+}
+
+.liste {
+    max-width: 600px;
+    margin: auto;
+    padding: 0 15px 30px;
+}
+
+.conversation {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    background: white;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.nom {
+    color: #1B5E20;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.signalement {
+    color: #E8A33D;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.dernier-message {
+    color: #666;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.date {
+    color: #999;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.non-lus {
+    display: inline-block;
+    margin-top: 8px;
+    background: #E8A33D;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.aucune {
+    text-align: center;
+    color: #888;
+    margin-top: 40px;
+    font-size: 15px;
+}
+</style>
+
+<div class="entete">
+    <h1>💬 Mes conversations</h1>
+</div>
+
+<div class="liste">
+
+{% if conversations|length == 0 %}
+
+<p class="aucune">
+    Aucune conversation pour l'instant.
+</p>
+
+{% else %}
+
+{% for c in conversations %}
+
+<a href="/contacter/{{ c['signalement_id'] }}" class="conversation">
+
+    <div class="nom">
+        💬 Conversation
+    </div>
+
+    <div class="signalement">
+        📍 {{ c['prenom'] or 'Signalement' }}
+        {% if c['ville'] %}
+        — {{ c['ville'] }}
+        {% endif %}
+    </div>
+
+    <div class="dernier-message">
+        {{ c['dernier_contenu'] or 'Aucun message' }}
+    </div>
+
+    <div class="date">
+        {{ c['dernier_message_date'] }}
+    </div>
+
+    {% if c['non_lus'] %}
+    <div class="non-lus">
+        {{ c['non_lus'] }} nouveau{% if c['non_lus'] > 1 %}x{% endif %} message{% if c['non_lus'] > 1 %}s{% endif %}
+    </div>
+    {% endif %}
+
+</a>
+
+{% endfor %}
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
