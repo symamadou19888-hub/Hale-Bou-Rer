@@ -120,23 +120,23 @@ body {
 <p><b>Statut :</b> {{ signalement["statut"] }}</p>
 
 <div class="actions-pub">
-<a href="/detail/{{ signalement['id'] }}">
+<a href="/detail/{{ signalement['id'] }}" style="display:block;">
 <button type="button" style="background:#1976D2;">
 👁 Voir les détails
 </button>
 </a>
-<a href="/modifier/{{ signalement['id'] }}">
+<a href="/modifier/{{ signalement['id'] }}" style="display:block;">
 <button type="button" style="background:#E8A33D;">
 ✏️ Modifier
 </button>
 </a>
-<form method="POST" action="/supprimer/{{ signalement['id'] }}" style="display:inline;" onsubmit="return confirm('Voulez-vous vraiment supprimer cette publication ?');">
+<form method="POST" action="/supprimer/{{ signalement['id'] }}" onsubmit="return confirm('Voulez-vous vraiment supprimer cette publication ?');">
 <button type="submit" style="background:#C0392B;">
 🗑 Supprimer
 </button>
 </form>
 {% if signalement["type"] == "perdu" %}
-<form method="POST" action="/marquer-retrouve/{{ signalement['id'] }}" style="display:inline;" onsubmit="return confirm('Confirmer que cet enfant a été retrouvé ?');">
+<form method="POST" action="/marquer-retrouve/{{ signalement['id'] }}" onsubmit="return confirm('Confirmer que cet enfant a été retrouvé ?');">
 <button type="submit" style="background:#1B5E20;">
 ✅ Marquer comme retrouvé
 </button>
