@@ -43,11 +43,11 @@
 
 <div style="text-align:center; margin-bottom:20px;">
 <img src="{{ url_for('static', filename='images/logo.png') }}" style="width:100%; max-width:340px; border-radius:20px; box-shadow:0 6px 20px rgba(0,0,0,0.1);">
-<h1 style="font-family:'Fraunces',serif; font-size:24px; color:#1B5E20; margin:16px 0 0 0;">Retrouvons rapidement nos enfants</h1>
+<h1 style="font-family:'Fraunces',serif; font-size:29px; color:#1B5E20; margin:16px 0 0 0;">Retrouvons rapidement nos enfants</h1>
 </div>
 
 {% if user_nom %}
-<div style="text-align:center; margin:14px 0 20px 0; font-size:14px;">
+<div style="text-align:center; margin:14px 0 20px 0; font-size:16px;">
     <span style="color:#1A1A1A;">👤 Bonjour <strong>{{ user_nom }}</strong></span><br>
     <a href="/profil" style="color:#1B5E20; font-weight:600; text-decoration:none;">Mon profil</a>
     <span style="color:#ccc;"> · </span>
@@ -57,8 +57,8 @@
 </div>
 {% else %}
 <div style="text-align:center; margin:14px 0 20px 0;">
-    <a href="/connexion" style="display:inline-block; background:white; color:#1B5E20; border:1.5px solid #1B5E20; padding:10px 22px; border-radius:20px; text-decoration:none; font-weight:600; font-size:14px; margin:4px;">Connexion</a>
-    <a href="/inscription" style="display:inline-block; background:#1B5E20; color:white; padding:10px 22px; border-radius:20px; text-decoration:none; font-weight:600; font-size:14px; margin:4px;">Créer un compte</a>
+    <a href="/connexion" style="display:inline-block; background:white; color:#1B5E20; border:1.5px solid #1B5E20; padding:12px 26px; border-radius:22px; text-decoration:none; font-weight:600; font-size:16px; margin:4px;">Connexion</a>
+    <a href="/inscription" style="display:inline-block; background:#1B5E20; color:white; padding:12px 26px; border-radius:22px; text-decoration:none; font-weight:600; font-size:16px; margin:4px;">Créer un compte</a>
 </div>
 {% endif %}
 
@@ -73,26 +73,26 @@
 <div style="margin-top:20px;">
 
 <a href="/signalements" style="text-decoration:none;">
-<div style="background:white; color:#1A1A1A; padding:16px; border-radius:16px; margin-bottom:12px; font-weight:600; text-align:center; box-shadow:0 4px 16px rgba(0,0,0,0.06); border:1.5px solid #EDEAE2;">
+<div style="background:white; color:#1A1A1A; padding:19px; border-radius:16px; margin-bottom:12px; font-weight:600; text-align:center; box-shadow:0 4px 16px rgba(0,0,0,0.06); border:1.5px solid #EDEAE2; font-size:17px;">
     📋 Voir les signalements
 </div>
 </a>
 
 <a href="/trouve" style="text-decoration:none;">
-<div style="background:#1B5E20; color:white; padding:16px; border-radius:16px; margin-bottom:12px; font-weight:600; text-align:center; box-shadow:0 4px 16px rgba(27,94,32,0.2);">
+<div style="background:#1B5E20; color:white; padding:19px; border-radius:16px; margin-bottom:12px; font-weight:600; text-align:center; box-shadow:0 4px 16px rgba(27,94,32,0.2); font-size:17px;">
     🟢 J'ai trouvé un enfant
 </div>
 </a>
 
 <a href="/perdu" style="text-decoration:none;">
-<div style="background:#E8A33D; color:white; padding:16px; border-radius:16px; margin-bottom:12px; font-weight:600; text-align:center; box-shadow:0 4px 16px rgba(232,163,61,0.3);">
+<div style="background:#E8A33D; color:white; padding:19px; border-radius:16px; margin-bottom:12px; font-weight:600; text-align:center; box-shadow:0 4px 16px rgba(232,163,61,0.3); font-size:17px;">
     🟠 Je cherche un enfant
 </div>
 </a>
 
 </div>
 
-<button id="notifBtn" style="display:block; width:100%; background:white; color:#1B5E20; border:1.5px solid #1B5E20; padding:14px; border-radius:16px; font-weight:600; font-size:15px; margin-top:8px; cursor:pointer;">
+<button id="notifBtn" style="display:block; width:100%; background:white; color:#1B5E20; border:1.5px solid #1B5E20; padding:16px; border-radius:16px; font-weight:600; font-size:16px; margin-top:8px; cursor:pointer;">
     🔔 Activer les notifications
 </button>
 
