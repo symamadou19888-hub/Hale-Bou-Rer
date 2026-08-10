@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modération - Halé Bou Rér</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
+<body style="background:#F7F5F0; font-family:'Inter', sans-serif; margin:0;">
 
 <button onclick="window.location.href='/'" class="btn-retour">
 ←
@@ -30,13 +33,107 @@
     z-index: 999;
     line-height: 1;
 }
+.titre-admin {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1B5E20;
+    text-align: center;
+    margin: 70px 0 20px 0;
+}
+.page-admin {
+    max-width: 500px;
+    margin: 0 auto 40px auto;
+    padding: 0 15px;
+}
+.aucun-signalement {
+    text-align: center;
+    font-size: 16px;
+    color: #555;
+    margin-top: 30px;
+}
+.carte-signalement {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    padding: 18px;
+    margin-bottom: 18px;
+}
+.carte-signalement h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    margin: 0 0 10px 0;
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+.carte-signalement h2.trouve {
+    background: #E8F5E9;
+    color: #1B5E20;
+}
+.carte-signalement h2.perdu {
+    background: #FFF3E0;
+    color: #E8A33D;
+}
+.alerte-abus {
+    background: #ffebee;
+    border-left: 4px solid #c62828;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+.carte-signalement img {
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+.carte-signalement p {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #333;
+    margin: 6px 0;
+}
+.actions-admin {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+}
+.actions-admin form {
+    flex: 1;
+}
+.btn-valider, .btn-rejeter {
+    width: 100%;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    color: white;
+}
+.btn-valider {
+    background: #1B5E20;
+}
+.btn-rejeter {
+    background: #C0392B;
+}
+.lien-retour-accueil {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    color: #1B5E20;
+    font-weight: 600;
+    text-decoration: none;
+}
 </style>
 
+<h1 class="titre-admin">🛡️ Modération des signalements</h1>
 
-<h1>🛡️ Modération des signalements</h1>
+<div class="page-admin">
 
 {% if signalements|length == 0 %}
-<p>Aucun signalement en attente 🎉</p>
+<p class="aucun-signalement">Aucun signalement en attente 🎉</p>
 {% endif %}
 
 {% for signalement in signalements %}
@@ -50,7 +147,7 @@
 {% endif %}
 
 {% if infos_abus.get(signalement[0]) %}
-<div style="background:#ffebee;border-left:4px solid #c62828;padding:10px;border-radius:8px;margin-bottom:10px;">
+<div class="alerte-abus">
 🚩 <b>{{ infos_abus[signalement[0]].nombre }} signalement(s) d'abus</b>
 {% if infos_abus[signalement[0]].raisons %}
 <br><i>Raisons : {{ infos_abus[signalement[0]].raisons | join(", ") }}</i>
@@ -58,7 +155,7 @@
 </div>
 {% endif %}
 
-{% if signalement[2] %}<img src="/uploads/{{ signalement[2] }}" width="200" style="border-radius:15px;"><br><br>{% endif %}
+{% if signalement[2] %}<img src="/uploads/{{ signalement[2] }}" width="200"><br>{% endif %}
 
 {% if signalement[10] %}<p><b>👤 Prénom :</b> {{ signalement[10] }}</p>{% endif %}
 {% if signalement[11] %}<p><b>🎂 Âge :</b> {{ signalement[11] }}</p>{% endif %}
@@ -69,22 +166,23 @@
 <p><b>📞 Contact :</b> {{ signalement[5] }}</p>
 <p><b>📅 Date :</b> {{ signalement[6] }}</p>
 
-<form method="POST" action="/admin/valider/{{ signalement[0] }}" style="display:inline;">
-    
-    <button type="submit" style="background:#2E7D32; color:white;">✅ Valider</button>
+<div class="actions-admin">
+<form method="POST" action="/admin/valider/{{ signalement[0] }}">
+    <button type="submit" class="btn-valider">✅ Valider</button>
 </form>
 
-<form method="POST" action="/admin/rejeter/{{ signalement[0] }}" style="display:inline;">
-    
-    <button type="submit" style="background:#c62828; color:white;">❌ Rejeter</button>
+<form method="POST" action="/admin/rejeter/{{ signalement[0] }}">
+    <button type="submit" class="btn-rejeter">❌ Rejeter</button>
 </form>
+</div>
 
 </div>
 
 {% endfor %}
 
-<br>
-<a href="/">⬅ Retour à l'accueil</a>
+<a href="/" class="lien-retour-accueil">⬅ Retour à l'accueil</a>
+
+</div>
 
 </body>
 </html>
