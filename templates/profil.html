@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon profil - Halé Bou Rér</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<button onclick="window.location.href='/'" class="btn-retour">
+←
+</button>
+
+<style>
+.btn-retour {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #2E7D32;
+    border-radius: 50%;
+    background: white;
+    color: #2E7D32;
+    font-size: 25px;
+    cursor: pointer;
+    z-index: 999;
+}
+.page-profil {
+    max-width: 500px;
+    margin: 70px auto 40px auto;
+    padding: 0 20px;
+}
+.page-profil h1 {
+    color: #2E7D32;
+    text-align: center;
+}
+.carte-profil {
+    background: #f5f5f5;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+    line-height: 2;
+}
+.bouton-profil {
+    display: block;
+    text-align: center;
+    background: #2E7D32;
+    color: white;
+    padding: 14px;
+    border-radius: 25px;
+    text-decoration: none;
+    margin-top: 15px;
+    font-weight: bold;
+}
+</style>
+
+<div class="page-profil">
+    <h1>👤 Mon profil</h1>
+
+    <div class="carte-profil">
+        <b>Nom :</b> {{ utilisateur.nom or "Non renseigne" }}<br>
+        <b>Email :</b> {{ utilisateur.email or "Non renseigne" }}<br>
+        <b>Téléphone :</b> {{ utilisateur.telephone or "Non renseigne" }}<br>
+        <b>Publications :</b> {{ nb_publications }}
+    </div>
+
+    <a href="/mes-publications" class="bouton-profil">📋 Voir mes publications</a>
+    <a href="/deconnexion" class="bouton-profil" style="background:#c0392b;">🚪 Se déconnecter</a>
+</div>
+
+</body>
+</html>

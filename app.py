@@ -509,6 +509,26 @@ def deconnexion():
 
 
 
+@app.route("/profil")
+def profil():
+    if not session.get("user_id"):
+        return redirect("/connexion")
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    utilisateur = conn.execute(
+        "SELECT id, nom, email, telephone FROM utilisateurs WHERE id=?",
+        (session.get("user_id"),)
+    ).fetchone()
+    nb_publications = conn.execute(
+        "SELECT COUNT(*) FROM signalements WHERE user_id=?",
+        (session.get("user_id"),)
+    ).fetchone()[0]
+    conn.close()
+
+    return render_template("profil.html", utilisateur=utilisateur, nb_publications=nb_publications)
+
+
 @app.route("/mes-publications")
 def mes_publications():
     if not session.get("user_id"):
