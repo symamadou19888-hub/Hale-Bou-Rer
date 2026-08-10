@@ -69,18 +69,23 @@ body {
 .carte-pub p { font-size: 16px; color: #1A1A1A; margin: 8px 0; line-height: 1.5; }
 .actions-pub {
     margin-top: 14px;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
+}
+.actions-pub form {
+    margin: 0;
 }
 .actions-pub button {
     border: none;
-    padding: 13px 16px;
+    padding: 13px 10px;
     border-radius: 12px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 15px;
+    font-size: 14px;
     color: white;
+    width: 100%;
+    box-sizing: border-box;
 }
 </style>
 
