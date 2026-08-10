@@ -135,12 +135,14 @@
 </div>
 
 {% if total_abus > 0 %}
+<a href="/admin" style="text-decoration:none;">
 <div class="grille-stats" style="grid-template-columns: 1fr;">
     <div class="carte-stat alerte">
         <div class="chiffre">🚩 {{ total_abus }}</div>
-        <div class="label">Signalement(s) d'abus à traiter</div>
+        <div class="label">Signalement(s) d'abus à traiter — appuyer pour voir</div>
     </div>
 </div>
+</a>
 {% endif %}
 
 <div class="section-titre">Derniers signalements</div>
