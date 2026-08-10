@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord - Halé Bou Rér</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body style="background:#F7F5F0; font-family:'Inter', sans-serif; margin:0;">
+
+<button onclick="window.location.href='/admin'" class="btn-retour">
+←
+</button>
+
+<style>
+.btn-retour {
+    position: fixed;
+    top: -10px;
+    left: -8px;
+    width: auto;
+    height: auto;
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    color: #1B5E20;
+    font-size: 76px;
+    font-weight: 300;
+    box-shadow: none;
+    cursor: pointer;
+    z-index: 999;
+    line-height: 1;
+}
+.titre-dashboard {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1B5E20;
+    text-align: center;
+    margin: 70px 0 20px 0;
+}
+.page-dashboard {
+    max-width: 500px;
+    margin: 0 auto 40px auto;
+    padding: 0 15px;
+}
+.grille-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+.carte-stat {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    padding: 16px;
+    text-align: center;
+}
+.carte-stat .chiffre {
+    font-family: 'Fraunces', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #1B5E20;
+}
+.carte-stat .label {
+    font-size: 13px;
+    color: #555;
+    margin-top: 4px;
+}
+.carte-stat.alerte .chiffre {
+    color: #C0392B;
+}
+.carte-stat.or .chiffre {
+    color: #E8A33D;
+}
+.section-titre {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    color: #1B5E20;
+    margin: 25px 0 10px 0;
+}
+.liste-recente {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    padding: 10px 16px;
+    margin-bottom: 20px;
+}
+.ligne-recente {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    color: #333;
+}
+.ligne-recente:last-child {
+    border-bottom: none;
+}
+.ligne-recente b {
+    color: #1B5E20;
+}
+</style>
+
+<h1 class="titre-dashboard">📊 Tableau de bord</h1>
+
+<div class="page-dashboard">
+
+<div class="grille-stats">
+    <div class="carte-stat">
+        <div class="chiffre">{{ total_signalements }}</div>
+        <div class="label">Signalements total</div>
+    </div>
+    <div class="carte-stat">
+        <div class="chiffre">{{ total_utilisateurs }}</div>
+        <div class="label">Comptes créés</div>
+    </div>
+    <div class="carte-stat">
+        <div class="chiffre">{{ total_trouves }}</div>
+        <div class="label">🟢 Trouvés</div>
+    </div>
+    <div class="carte-stat or">
+        <div class="chiffre">{{ total_perdus }}</div>
+        <div class="label">🟠 Perdus</div>
+    </div>
+    <div class="carte-stat">
+        <div class="chiffre">{{ total_actifs }}</div>
+        <div class="label">Actifs</div>
+    </div>
+    <div class="carte-stat alerte">
+        <div class="chiffre">{{ total_en_attente }}</div>
+        <div class="label">En attente</div>
+    </div>
+</div>
+
+{% if total_abus > 0 %}
+<div class="grille-stats" style="grid-template-columns: 1fr;">
+    <div class="carte-stat alerte">
+        <div class="chiffre">🚩 {{ total_abus }}</div>
+        <div class="label">Signalement(s) d'abus à traiter</div>
+    </div>
+</div>
+{% endif %}
+
+<div class="section-titre">Derniers signalements</div>
+<div class="liste-recente">
+{% for s in derniers_signalements %}
+<div class="ligne-recente">
+    {% if s['type'] == 'trouve' %}🟢{% else %}🟠{% endif %}
+    <b>{{ s['prenom'] or 'Sans nom' }}</b> — {{ s['ville'] or s['zone'] or '' }}
+</div>
+{% else %}
+<div class="ligne-recente">Aucun signalement</div>
+{% endfor %}
+</div>
+
+<div class="section-titre">Derniers comptes créés</div>
+<div class="liste-recente">
+{% for u in derniers_utilisateurs %}
+<div class="ligne-recente">
+    <b>{{ u['nom'] or 'Sans nom' }}</b> — {{ u['email'] or u['telephone'] or '' }}
+</div>
+{% else %}
+<div class="ligne-recente">Aucun utilisateur</div>
+{% endfor %}
+</div>
+
+</div>
+
+</body>
+</html>

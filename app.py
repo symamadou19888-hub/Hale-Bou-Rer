@@ -378,6 +378,66 @@ def admin_deconnexion():
     return redirect("/admin")
 
 
+@app.route("/admin/dashboard")
+def admin_dashboard():
+    if not session.get("admin_connecte"):
+        return redirect("/admin")
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+
+    total_signalements = conn.execute(
+        "SELECT COUNT(*) FROM signalements"
+    ).fetchone()[0]
+
+    total_trouves = conn.execute(
+        "SELECT COUNT(*) FROM signalements WHERE type='trouve'"
+    ).fetchone()[0]
+
+    total_perdus = conn.execute(
+        "SELECT COUNT(*) FROM signalements WHERE type='perdu'"
+    ).fetchone()[0]
+
+    total_en_attente = conn.execute(
+        "SELECT COUNT(*) FROM signalements WHERE statut='en_attente'"
+    ).fetchone()[0]
+
+    total_actifs = conn.execute(
+        "SELECT COUNT(*) FROM signalements WHERE statut='actif'"
+    ).fetchone()[0]
+
+    total_utilisateurs = conn.execute(
+        "SELECT COUNT(*) FROM utilisateurs"
+    ).fetchone()[0]
+
+    total_abus = conn.execute(
+        "SELECT COUNT(DISTINCT signalement_id) FROM abus"
+    ).fetchone()[0]
+
+    derniers_signalements = conn.execute(
+        "SELECT * FROM signalements ORDER BY id DESC LIMIT 5"
+    ).fetchall()
+
+    derniers_utilisateurs = conn.execute(
+        "SELECT * FROM utilisateurs ORDER BY id DESC LIMIT 5"
+    ).fetchall()
+
+    conn.close()
+
+    return render_template(
+        "dashboard.html",
+        total_signalements=total_signalements,
+        total_trouves=total_trouves,
+        total_perdus=total_perdus,
+        total_en_attente=total_en_attente,
+        total_actifs=total_actifs,
+        total_utilisateurs=total_utilisateurs,
+        total_abus=total_abus,
+        derniers_signalements=derniers_signalements,
+        derniers_utilisateurs=derniers_utilisateurs
+    )
+
+
 @app.route("/admin/valider/<int:id>", methods=["POST"])
 def admin_valider(id):
     if not session.get("admin_connecte"):
