@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enfant perdu - Halé Bou Rér</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
@@ -14,6 +16,11 @@
 </button>
 
 <style>
+body {
+    background: #F7F5F0;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
 .btn-retour {
     position: fixed;
     top: -10px;
@@ -21,7 +28,6 @@
     width: auto;
     height: auto;
     border: none;
-    border-radius: 0;
     background: transparent;
     color: #1B5E20;
     font-size: 76px;
@@ -31,16 +37,89 @@
     z-index: 999;
     line-height: 1;
 }
+.page-signaler {
+    max-width: 460px;
+    margin: 0 auto;
+    padding: 96px 20px 40px 20px;
+}
+.titre-signaler {
+    font-family: 'Fraunces', serif;
+    font-size: 25px;
+    color: #E8A33D;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.carte-formulaire {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.carte-formulaire label {
+    display: block;
+    font-size: 13px;
+    color: #6b6b6b;
+    font-weight: 600;
+    margin-bottom: 6px;
+    margin-top: 16px;
+}
+.carte-formulaire label:first-of-type {
+    margin-top: 0;
+}
+.carte-formulaire input[type="text"],
+.carte-formulaire input[type="tel"],
+.carte-formulaire input[type="file"],
+.carte-formulaire select,
+.carte-formulaire textarea {
+    width: 100%;
+    padding: 13px 14px;
+    border-radius: 12px;
+    border: 1.5px solid #EDEAE2;
+    font-size: 15px;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+    background: white;
+}
+.carte-formulaire textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+.carte-formulaire input:focus,
+.carte-formulaire select:focus,
+.carte-formulaire textarea:focus {
+    outline: none;
+    border-color: #E8A33D;
+}
+#statut_position {
+    font-size: 13px;
+    color: #6b6b6b;
+    text-align: center;
+    margin-top: 14px;
+}
+.bouton-signaler {
+    display: block;
+    width: 100%;
+    background: #E8A33D;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 16px;
+    margin-top: 18px;
+    cursor: pointer;
+}
 </style>
 
 
-<h1>🟠 Je cherche un enfant</h1>
+<div class="page-signaler">
+<h1 class="titre-signaler">🟠 Je cherche un enfant</h1>
 
 {% if erreur_spam %}
 <p style="color:red; text-align:center; font-weight:bold;">⚠️ {{ erreur_spam }}</p>
 {% endif %}
 
-<form method="POST" action="/perdu" enctype="multipart/form-data">
+<form method="POST" action="/perdu" enctype="multipart/form-data" class="carte-formulaire">
 <div style="position:absolute !important; left:-9999px !important; top:-9999px !important; width:1px !important; height:1px !important; overflow:hidden !important; opacity:0 !important;" aria-hidden="true">
 <label for="site_web">Site web</label>
 <input type="text" id="site_web" name="site_web" tabindex="-1" autocomplete="off">
@@ -82,11 +161,12 @@
 
     <br>
 
-    <button type="submit">
+    <button type="submit" class="bouton-signaler">
         Publier la recherche
     </button>
 
 </form>
+</div>
 
 <script>
 window.onload = obtenirPosition;
