@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confidentialité - Halé Bou Rér</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<button onclick="window.location.href='/'" class="btn-retour">
+←
+</button>
+
+<style>
+.btn-retour {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #2E7D32;
+    border-radius: 50%;
+    background: white;
+    color: #2E7D32;
+    font-size: 25px;
+    cursor: pointer;
+    z-index: 999;
+}
+.page-confidentialite {
+    max-width: 700px;
+    margin: 70px auto 40px auto;
+    padding: 0 20px;
+    line-height: 1.6;
+}
+.page-confidentialite h1 {
+    color: #2E7D32;
+    text-align: center;
+}
+.page-confidentialite h2 {
+    color: #2E7D32;
+    margin-top: 25px;
+}
+</style>
+
+<div class="page-confidentialite">
+    <h1>🔒 Confidentialité et mentions légales</h1>
+
+    <h2>Qui gère ce site</h2>
+    <p>Halé Bou Rér est un projet civique indépendant, créé pour aider les familles à retrouver des enfants perdus au Sénégal.</p>
+
+    <h2>Données collectées</h2>
+    <p>Lorsqu'un signalement est publié, nous collectons : prénom, âge, sexe, ville, zone, description, photo et numéro de contact de la personne qui signale.</p>
+
+    <h2>Pourquoi ces données</h2>
+    <p>Ces informations servent uniquement à aider à identifier et retrouver un enfant perdu. Elles ne sont jamais vendues ni partagées à des fins commerciales.</p>
+
+    <h2>Protection des données</h2>
+    <p>Les données sont stockées de façon sécurisée. L'accès au panneau d'administration est protégé par mot de passe. Des sauvegardes régulières sont effectuées pour éviter toute perte de données.</p>
+
+    <h2>Durée de conservation</h2>
+    <p>Un signalement reste visible tant qu'il est actif. Une fois l'enfant retrouvé ou le signalement résolu, il peut être retiré de la liste publique à la demande.</p>
+
+    <h2>Droit de suppression</h2>
+    <p>Toute personne peut demander la suppression d'un signalement ou de ses données personnelles en nous contactant directement.</p>
+
+    <h2>Contact</h2>
+    <p>
+        📧 Email : symamadou19888@gmail.com<br>
+        📱 Téléphone : 00221788403934
+    </p>
+</div>
+
+</body>
+</html>

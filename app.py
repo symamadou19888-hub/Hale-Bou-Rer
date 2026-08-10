@@ -228,6 +228,11 @@ def perdu():
     return render_template("perdu.html")
 
 
+@app.route("/confidentialite")
+def confidentialite():
+    return render_template("confidentialite.html")
+
+
 @app.route("/signalements")
 def signalements():
     filtre = request.args.get("filtre")
