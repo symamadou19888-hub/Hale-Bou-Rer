@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signalements - Halé Bou Rér</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -20,6 +22,11 @@
 </button>
 
 <style>
+body {
+    background: #F7F5F0;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
 .btn-retour {
     position: fixed;
     top: -10px;
@@ -27,7 +34,6 @@
     width: auto;
     height: auto;
     border: none;
-    border-radius: 0;
     background: transparent;
     color: #1B5E20;
     font-size: 76px;
@@ -37,10 +43,92 @@
     z-index: 999;
     line-height: 1;
 }
+.page-signalements {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 96px 20px 40px 20px;
+}
+.titre-signalements {
+    font-family: 'Fraunces', serif;
+    font-size: 25px;
+    color: #1B5E20;
+    text-align: center;
+    margin-bottom: 18px;
+}
+.legende-carte {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #6b6b6b;
+}
+.filtre-boutons button {
+    background: white;
+    color: #1B5E20;
+    border: 1.5px solid #EDEAE2;
+    padding: 10px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 3px;
+}
+.recherche-input {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 25px;
+    border: 1.5px solid #EDEAE2;
+    font-size: 15px;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+.recherche-input:focus {
+    outline: none;
+    border-color: #1B5E20;
+}
+.carte-pub {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.badge-statut {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 14px;
+}
+.badge-trouve { background: #E6F4EA; color: #1B5E20; }
+.badge-perdu { background: #FDF1E0; color: #B9700E; }
+.carte-pub p { font-size: 16px; color: #1A1A1A; margin: 8px 0; line-height: 1.5; }
+.actions-pub {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.actions-pub a, .actions-pub form { display: block; margin: 0; }
+.actions-pub button {
+    border: none;
+    padding: 13px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+}
 </style>
 
 
-<h1>📋 Signalements récents</h1>
+<div class="page-signalements">
+<h1 class="titre-signalements">📋 Signalements récents</h1>
 
 <div id="notif-nouveaux" style="display:none; background:#1976D2; color:white; padding:12px; border-radius:12px; max-width:400px; margin:15px auto; font-weight:bold; cursor:pointer; text-align:center;" onclick="location.reload()">
     🔔 Nouveaux signalements disponibles - Cliquez pour actualiser
@@ -66,13 +154,13 @@ verifierNouveaux();
 setInterval(verifierNouveaux, 15000);
 </script>
 
-<div style="display:flex; gap:15px; align-items:center; margin-bottom:10px; font-size:14px;">
+<div class="legende-carte">
     <span><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:green;"></span> Trouvé</span>
     <span><span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:orange;"></span> Perdu</span>
 </div>
 <div id="carte" style="height: 400px; margin-bottom: 20px; border-radius: 10px;"></div>
 
-<div class="filtre-boutons" style="text-align:center; margin-bottom:20px;">
+<div class="filtre-boutons" style="text-align:center; margin-bottom:18px;">
     <a href="/signalements"><button>Tous</button></a>
     <a href="/signalements?filtre=trouve"><button>🟢 Trouvés</button></a>
     <a href="/signalements?filtre=perdu"><button>🟠 Perdus</button></a>
@@ -84,7 +172,7 @@ setInterval(verifierNouveaux, 15000);
 name="recherche"
 placeholder="🔍 Écrire le nom"
 value="{{ recherche or '' }}"
-style="width:90%; max-width:500px; padding:14px; border-radius:25px; border:1px solid #ccc;">
+class="recherche-input">
 
 </form>
 
@@ -143,12 +231,12 @@ if (points.length > 0) {
 
 {% for signalement in signalements %}
 
-<div class="carte-signalement">
+<div class="carte-pub">
 
 {% if signalement[1] == "trouve" %}
-<h2 class="trouve">🟢 Enfant trouvé</h2>
+<span class="badge-statut badge-trouve">🟢 Enfant trouvé</span>
 {% else %}
-<h2 class="perdu">🟠 Enfant perdu</h2>
+<span class="badge-statut badge-perdu">🟠 Enfant perdu</span>
 {% endif %}
 
 
@@ -172,16 +260,16 @@ if (points.length > 0) {
 
 <p><b>📅 Date :</b> {{ signalement[6] }}</p>
 
-<div style="margin-top:15px;">
+<div class="actions-pub">
 
 <a href="/detail/{{ signalement[0] }}">
-<button type="button" style="background:#1976D2;color:white;border:none;padding:10px 15px;border-radius:10px;margin-right:10px;cursor:pointer;">
+<button type="button" style="background:#1976D2;">
 👁 Voir les détails
 </button>
 </a>
 
-<form method="POST" action="/resolu/{{ signalement[0] }}" style="display:inline;">
-<button class="btn-resolu">
+<form method="POST" action="/resolu/{{ signalement[0] }}">
+<button type="submit" style="background:#1B5E20;">
 ✅ Marquer comme résolu
 </button>
 </form>
@@ -192,7 +280,8 @@ if (points.length > 0) {
 
 {% endfor %}
 
-<a href="/">⬅ Retour à l'accueil</a>
+</div>
+<div style="text-align:center; padding-bottom:20px;"><a href="/">⬅ Retour à l'accueil</a></div>
 
 </body>
 </html>
