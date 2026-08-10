@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer un compte - Halé Bou Rér</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 
@@ -14,54 +16,97 @@
 </button>
 
 <style>
-.btn-retour {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    width: auto;
-    height: auto;
-    border: none;
-    border-radius: 0;
-    background: transparent;
+body {
+    background: #F7F5F0;
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+}
+.page-auth {
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 96px 20px 40px 20px;
+}
+.titre-auth {
+    font-family: 'Fraunces', serif;
+    font-size: 27px;
     color: #1B5E20;
-    font-size: 76px;
-    font-weight: bold;
-    box-shadow: none;
+    text-align: center;
+    margin-bottom: 22px;
+}
+.carte-formulaire {
+    background: white;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.carte-formulaire label {
+    display: block;
+    font-size: 13px;
+    color: #6b6b6b;
+    font-weight: 600;
+    margin-bottom: 6px;
+    margin-top: 16px;
+}
+.carte-formulaire label:first-child {
+    margin-top: 0;
+}
+.carte-formulaire input {
+    width: 100%;
+    padding: 13px 14px;
+    border-radius: 12px;
+    border: 1.5px solid #EDEAE2;
+    font-size: 15px;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+.carte-formulaire input:focus {
+    outline: none;
+    border-color: #1B5E20;
+}
+.bouton-principal {
+    display: block;
+    width: 100%;
+    background: #1B5E20;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 16px;
+    margin-top: 22px;
     cursor: pointer;
-    z-index: 999;
-    line-height: 1;
 }
 </style>
 
-<h1>📝 Créer un compte</h1>
+<div class="page-auth">
+<h1 class="titre-auth">📝 Créer un compte</h1>
 
 {% if erreur %}
 <p style="color:red; text-align:center; font-weight:bold;">⚠️ {{ erreur }}</p>
 {% endif %}
 
-<form method="POST" action="/inscription">
+<form method="POST" action="/inscription" class="carte-formulaire">
 
-    <label>Nom</label><br>
-    <input type="text" name="nom" placeholder="Votre nom"><br><br>
+    <label>Nom</label>
+    <input type="text" name="nom" placeholder="Votre nom">
 
-    <label>Email</label><br>
-    <input type="email" name="email" placeholder="exemple@email.com"><br><br>
+    <label>Email</label>
+    <input type="email" name="email" placeholder="exemple@email.com">
 
-    <label>Téléphone</label><br>
-    <input type="tel" name="telephone" placeholder="7X XXX XX XX"><br><br>
+    <label>Téléphone</label>
+    <input type="tel" name="telephone" placeholder="7X XXX XX XX">
 
-    <label>Mot de passe</label><br>
-    <input type="password" name="mot_de_passe" required><br><br>
+    <label>Mot de passe</label>
+    <input type="password" name="mot_de_passe" required>
 
-    <button type="submit">
+    <button type="submit" class="bouton-principal">
         Créer mon compte
     </button>
 
 </form>
 
-<br>
-
-<p style="text-align:center;">Déjà un compte ? <a href="/connexion">Se connecter</a></p>
+<p style="text-align:center; margin-top:18px; font-size:14px; color:#6b6b6b;">Déjà un compte ? <a href="/connexion" style="color:#1B5E20; font-weight:600;">Se connecter</a></p>
+</div>
 
 <a href="/">⬅ Retour à l'accueil</a>
 
