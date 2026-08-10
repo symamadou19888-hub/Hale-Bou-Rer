@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administration - Halé Bou Rér</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
+<body style="background:#F7F5F0; font-family:'Inter', sans-serif; margin:0;">
 
 <button onclick="window.location.href='/'" class="btn-retour">
 ←
@@ -30,24 +33,91 @@
     z-index: 999;
     line-height: 1;
 }
+.titre-admin-login {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1B5E20;
+    text-align: center;
+    margin: 70px 0 25px 0;
+}
+.carte-formulaire {
+    max-width: 380px;
+    margin: 0 auto 30px auto;
+    padding: 25px 20px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+.carte-formulaire label {
+    display: block;
+    font-weight: 600;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 6px;
+}
+.carte-formulaire input {
+    width: 100%;
+    padding: 11px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    background: #F7F5F0;
+}
+.carte-formulaire input:focus {
+    outline: none;
+    border-color: #1B5E20;
+}
+.btn-connexion-admin {
+    background: #1B5E20;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    width: 100%;
+    margin-top: 18px;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+}
+.btn-connexion-admin:active {
+    opacity: 0.85;
+}
+.erreur-admin {
+    color: #C0392B;
+    font-size: 14px;
+    margin-top: 12px;
+    text-align: center;
+}
+.lien-retour-accueil {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #1B5E20;
+    font-weight: 600;
+    text-decoration: none;
+}
 </style>
 
+<h1 class="titre-admin-login">🔒 Administration</h1>
 
-<h1>🔒 Administration</h1>
-
+<div class="carte-formulaire">
 <form method="POST" action="/admin">
-    <label>Mot de passe</label><br>
-    <input type="password" name="mot_de_passe" placeholder="Mot de passe admin"><br><br>
+    <label>Mot de passe</label>
+    <input type="password" name="mot_de_passe" placeholder="Mot de passe admin">
 
     {% if erreur %}
-    <p style="color:red;">{{ erreur }}</p>
+    <p class="erreur-admin">{{ erreur }}</p>
     {% endif %}
 
-    <button type="submit">Se connecter</button>
+    <button type="submit" class="btn-connexion-admin">Se connecter</button>
 </form>
+</div>
 
-<br>
-<a href="/">⬅ Retour à l'accueil</a>
+<a href="/" class="lien-retour-accueil">⬅ Retour à l'accueil</a>
 
 </body>
 </html>
