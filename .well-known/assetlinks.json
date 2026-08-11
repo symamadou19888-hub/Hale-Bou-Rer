@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.pythonanywhere.symamadou1988.twa",
+    "sha256_cert_fingerprints": ["2A:B2:8C:C6:21:66:42:6C:92:B5:47:00:B3:CB:14:F2:F6:DF:54:A3:21:30:48:05:E3:AC:6C:BE:9E:23:F7:CB"]
+  }
+}]

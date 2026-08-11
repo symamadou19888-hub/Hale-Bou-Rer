@@ -874,5 +874,10 @@ def marquer_retrouve(id):
     return redirect("/mes-publications")
 
 
+
+@app.route('/.well-known/assetlinks.json')
+def assetlinks():
+    return send_from_directory('.well-known', 'assetlinks.json', mimetype='application/json')
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
