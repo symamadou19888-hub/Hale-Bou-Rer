@@ -35,7 +35,6 @@ except ImportError:
 
 
 def envoyer_notifications(titre, message):
-    import time as _t; print(f"[DEBUG PUSH] appel envoyer_notifications a {_t.time()}")
     if not PUSH_ACTIF:
         return
 
@@ -217,18 +216,12 @@ def enregistrer_signalement(type_signalement):
         )
     )
 
-    signalement_id = cursor.lastrowid
-
     conn.commit()
     conn.close()
 
     envoyer_notifications(
         "Halé Bou Rér",
-        json.dumps({
-            "title": "Halé Bou Rér",
-            "body": "Nouveau signalement disponible",
-            "url": f"/detail/{signalement_id}"
-        })
+        json.dumps({"title": "Halé Bou Rér", "body": "Nouveau signalement disponible"})
     )
 
 
@@ -630,11 +623,6 @@ def subscribe():
 
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-
-    cursor.execute(
-        "DELETE FROM subscriptions WHERE endpoint=?",
-        (data["endpoint"],)
-    )
 
     cursor.execute(
         "INSERT INTO subscriptions (endpoint, p256dh, auth, user_id) VALUES (?, ?, ?, ?)",
