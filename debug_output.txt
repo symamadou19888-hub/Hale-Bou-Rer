@@ -1,0 +1,5 @@
+=== COUNT ABONNEMENTS ===
+5
+=== APPELS envoyer_notifications ===
+37:def envoyer_notifications(titre, message):
+225:    envoyer_notifications(
