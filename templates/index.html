@@ -157,6 +157,7 @@ document.getElementById("notifBtn").onclick = async function() {
 
     await fetch("/subscribe", {
         method: "POST",
+        credentials: "same-origin",
         headers: {
             "Content-Type": "application/json"
         },
