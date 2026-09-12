@@ -41,21 +41,15 @@
 
 <div style="max-width:460px; margin:0 auto; padding:96px 20px 30px 20px;">
 
-<div style="text-align:center; margin-bottom:20px;">
-<img src="{{ url_for('static', filename='images/logo.png') }}" style="width:100%; max-width:340px; border-radius:20px; box-shadow:0 6px 20px rgba(0,0,0,0.1);">
-<h1 style="font-family:'Fraunces',serif; font-size:29px; color:#1B5E20; margin:16px 0 0 0;">Retrouvons rapidement nos enfants</h1>
-</div>
-
 {% if user_nom %}
 <div style="text-align:center; margin:14px 0 20px 0; font-size:16px;">
-    <span style="color:#1A1A1A;">👤 Bonjour <strong>{{ user_nom }}</strong></span><br>
-    <a href="/profil" style="color:#1B5E20; font-weight:600; text-decoration:none;">Mon profil</a>
-    <span style="color:#ccc;"> · </span>
-    <a href="/mes-publications" style="color:#1B5E20; font-weight:600; text-decoration:none;">Mes publications</a>
-    <span style="color:#ccc;"> · </span>
-    <a href="/mes-conversations" style="color:#1B5E20; font-weight:600; text-decoration:none;">💬 Mes conversations</a>
-    <span style="color:#ccc;"> · </span>
-    <a href="/deconnexion" style="color:#c0392b; font-weight:600; text-decoration:none;">Se déconnecter</a>
+    <div style="color:#1A1A1A; margin-bottom:10px;">👤 Bonjour <strong>{{ user_nom }}</strong></div>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+        <a href="/profil" style="color:#1B5E20; font-weight:600; text-decoration:none;">Mon profil</a>
+        <a href="/mes-publications" style="color:#1B5E20; font-weight:600; text-decoration:none;">Mes publications</a>
+        <a href="/mes-conversations" style="color:#1B5E20; font-weight:600; text-decoration:none;">💬 Mes conversations</a>
+        <a href="/deconnexion" style="color:#c0392b; font-weight:600; text-decoration:none;">Se déconnecter</a>
+    </div>
 </div>
 {% else %}
 <div style="text-align:center; margin:14px 0 20px 0;">
@@ -63,6 +57,12 @@
     <a href="/inscription" style="display:inline-block; background:#1B5E20; color:white; padding:12px 26px; border-radius:22px; text-decoration:none; font-weight:600; font-size:16px; margin:4px;">Créer un compte</a>
 </div>
 {% endif %}
+
+
+<div style="text-align:center; margin-bottom:20px;">
+<img src="{{ url_for('static', filename='images/logo.png') }}" style="width:100%; max-width:340px; border-radius:20px; box-shadow:0 6px 20px rgba(0,0,0,0.1);">
+<h1 style="font-family:'Fraunces',serif; font-size:29px; color:#1B5E20; margin:16px 0 0 0;">Retrouvons rapidement nos enfants</h1>
+</div>
 
 {% if nb_aujourdhui and nb_aujourdhui > 0 %}
 <a href="/signalements" style="text-decoration:none;">
