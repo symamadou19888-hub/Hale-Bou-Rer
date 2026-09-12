@@ -539,20 +539,42 @@ def contacter(signalement_id):
         conn.close()
         return "Ce signalement n'a pas de proprietaire identifiable", 400
 
-    if proprietaire_id == session["user_id"]:
-        conn.close()
-        return redirect(f"/detail/{signalement_id}")
+    utilisateur_id = session["user_id"]
+
+    # Si l'utilisateur est le proprietaire du signalement,
+    # retrouver automatiquement l'autre participant de la conversation.
+    if proprietaire_id == utilisateur_id:
+        autre = conn.execute(
+            """SELECT CASE
+                     WHEN expediteur_id=? THEN destinataire_id
+                     ELSE expediteur_id
+                   END AS autre_id
+               FROM messages
+               WHERE signalement_id=?
+                 AND (expediteur_id=? OR destinataire_id=?)
+               ORDER BY date_envoi DESC
+               LIMIT 1""",
+            (utilisateur_id, signalement_id, utilisateur_id, utilisateur_id)
+        ).fetchone()
+
+        if autre is None:
+            conn.close()
+            return redirect(f"/detail/{signalement_id}")
+
+        autre_id = autre["autre_id"]
+    else:
+        autre_id = proprietaire_id
 
     if request.method == "POST":
         contenu_msg = request.form.get("contenu", "").strip()
         if contenu_msg:
             conn.execute(
                 "INSERT INTO messages (signalement_id, expediteur_id, destinataire_id, contenu) VALUES (?, ?, ?, ?)",
-                (signalement_id, session["user_id"], proprietaire_id, contenu_msg)
+                (signalement_id, utilisateur_id, autre_id, contenu_msg)
             )
             conn.commit()
             envoyer_notification_utilisateur(
-                proprietaire_id,
+                autre_id,
                 "Nouveau message",
                 "Vous avez recu un nouveau message a propos d'un signalement."
             )
@@ -565,7 +587,7 @@ def contacter(signalement_id):
            AND ((m.expediteur_id=? AND m.destinataire_id=?)
            OR (m.expediteur_id=? AND m.destinataire_id=?))
            ORDER BY m.date_envoi ASC""",
-        (signalement_id, session["user_id"], proprietaire_id, proprietaire_id, session["user_id"])
+        (signalement_id, utilisateur_id, autre_id, autre_id, utilisateur_id)
     ).fetchall()
 
     conn.execute(
